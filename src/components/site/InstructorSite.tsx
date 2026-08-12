@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { Clock, CalendarDays, Car, Star, Check, Quote } from "lucide-react";
+import { Star, Quote } from "lucide-react";
 
+import CourseCard from "@/components/CourseCard";
 import { EnquiryForm } from "./EnquiryForm";
 import {
   DEFAULT_ACCENT,
@@ -583,197 +584,32 @@ export function InstructorSite({
             </p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ gap: 24, alignItems: "stretch" }}>
-              {courses.map((course, index) => {
-                const startDate = formatDate(course.start_date || course.available_from);
-                const featured = courses.length > 1 && index === Math.min(1, courses.length - 1);
-                const features = [
-                  course.total_hours != null ? `${course.total_hours} hours of tuition` : null,
-                  course.transmission ? `${course.transmission} transmission` : null,
-                  startDate ? `Next start ${startDate}` : "Flexible start dates",
-                  "Fully qualified DVSA instructor",
-                  "Progress tracked every lesson",
-                ].filter(Boolean) as string[];
-                return (
-                  <article
-                    key={course.id}
-                    style={{
-                      position: "relative",
-                      background: T.white,
-                      borderRadius: 22,
-                      padding: featured ? "34px 28px 28px" : "28px",
-                      border: `1px solid ${featured ? alpha(accent, 0.35) : T.border}`,
-                      boxShadow: featured ? CARD_SHADOW_ED : CARD_SHADOW_SOFT,
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: 18,
-                      transform: featured ? "translateY(-8px)" : undefined,
-                    }}
-                  >
-                    {featured ? (
-                      <span
-                        style={{
-                          position: "absolute",
-                          top: -13,
-                          left: 28,
-                          background: accent,
-                          color: T.white,
-                          fontSize: 10,
-                          fontWeight: 800,
-                          letterSpacing: "0.1em",
-                          textTransform: "uppercase",
-                          borderRadius: 50,
-                          padding: "6px 14px",
-                        }}
-                      >
-                        Most popular
-                      </span>
-                    ) : null}
-
-                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                      <span
-                        style={{
-                          width: 42,
-                          height: 42,
-                          borderRadius: 12,
-                          background: alpha(accent, 0.1),
-                          color: accent,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          flexShrink: 0,
-                        }}
-                      >
-                        <Car size={20} />
-                      </span>
-                      <h3
-                        style={{
-                          fontFamily: FONT_HEADING,
-                          fontSize: 19,
-                          fontWeight: 800,
-                          color: T.navy,
-                          lineHeight: 1.3,
-                        }}
-                      >
-                        {course.name || course.course_type || "Driving course"}
-                      </h3>
-                    </div>
-
-                    <div style={{ display: "flex", alignItems: "flex-end", gap: 8 }}>
-                      {course.price != null ? (
-                        <>
-                          <span
-                            style={{
-                              fontFamily: FONT_HEADING,
-                              fontSize: 40,
-                              fontWeight: 800,
-                              color: T.navy,
-                              lineHeight: 1,
-                            }}
-                          >
-                            £{course.price}
-                          </span>
-                          <span style={{ fontSize: 13, color: T.muted, fontWeight: 600, paddingBottom: 4 }}>
-                            per course
-                          </span>
-                        </>
-                      ) : (
-                        <span
-                          style={{
-                            fontFamily: FONT_HEADING,
-                            fontSize: 26,
-                            fontWeight: 800,
-                            color: T.navy,
-                          }}
-                        >
-                          Price on enquiry
-                        </span>
-                      )}
-                    </div>
-
-                    {course.description ? (
-                      <p style={{ fontSize: 14.5, color: T.muted, lineHeight: 1.65 }}>{course.description}</p>
-                    ) : null}
-
-                    <div style={{ height: 1, background: T.border }} />
-
-                    <ul style={{ display: "flex", flexDirection: "column", gap: 11, listStyle: "none" }}>
-                      {features.map((feature) => (
-                        <li
-                          key={feature}
-                          style={{ display: "flex", gap: 10, alignItems: "flex-start", fontSize: 14, color: T.navy }}
-                        >
-                          <span
-                            style={{
-                              width: 19,
-                              height: 19,
-                              borderRadius: 999,
-                              background: alpha(accent, 0.12),
-                              color: accent,
-                              display: "inline-flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              flexShrink: 0,
-                              marginTop: 1,
-                            }}
-                          >
-                            <Check size={12} strokeWidth={3} />
-                          </span>
-                          <span style={{ fontWeight: 500 }}>{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: 14, marginTop: 2 }}>
-                      {course.total_hours != null ? (
-                        <span
-                          style={{
-                            display: "inline-flex",
-                            alignItems: "center",
-                            gap: 6,
-                            fontSize: 12.5,
-                            color: T.muted,
-                            fontWeight: 600,
-                          }}
-                        >
-                          <Clock size={13} /> {course.total_hours} hrs
-                        </span>
-                      ) : null}
-                      {startDate ? (
-                        <span
-                          style={{
-                            display: "inline-flex",
-                            alignItems: "center",
-                            gap: 6,
-                            fontSize: 12.5,
-                            color: T.muted,
-                            fontWeight: 600,
-                          }}
-                        >
-                          <CalendarDays size={13} /> {startDate}
-                        </span>
-                      ) : null}
-                    </div>
-
-                    <button
-                      onClick={() => goEnquire(course.name || course.course_type || "")}
-                      style={{
-                        marginTop: "auto",
-                        width: "100%",
-                        background: featured ? accent : T.white,
-                        color: featured ? T.white : accent,
-                        border: `1.5px solid ${accent}`,
-                        borderRadius: 12,
-                        padding: 14,
-                        fontSize: 14.5,
-                        fontWeight: 700,
-                        cursor: "pointer",
-                      }}
-                    >
-                      Book this course
-                    </button>
-                  </article>
-                );
-              })}
+              {courses.map((course) => (
+                <CourseCard
+                  key={course.id}
+                  course={{
+                    id: course.id,
+                    name: course.name ?? null,
+                    course_type: course.course_type ?? null,
+                    total_hours: course.total_hours ?? null,
+                    price: course.price ?? null,
+                    start_date: course.start_date ?? null,
+                    available_from: course.available_from ?? null,
+                    image_url: course.image_url ?? null,
+                    description: course.description ?? null,
+                  }}
+                  instructor={{
+                    id: instructor.id,
+                    name: instructor.name ?? null,
+                    trading_name: instructor.trading_name ?? null,
+                    profile_image_url: instructor.profile_image_url ?? null,
+                    brand_colour: instructor.brand_colour ?? null,
+                    hourly_rate: (instructor['hourly_rate'] as number | null) ?? null,
+                    city: instructor.city ?? null,
+                  }}
+                  onEnquire={() => goEnquire(course.name || course.course_type || "")}
+                />
+              ))}
             </div>
           )}
         </div>
