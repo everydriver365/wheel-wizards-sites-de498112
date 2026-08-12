@@ -294,7 +294,33 @@ export function InstructorSite({
         >
           {/* left: copy */}
           <div>
-            <Eyebrow accent={accent}>{name}</Eyebrow>
+            {instructor.logo_url ? (
+              <img
+                src={instructor.logo_url}
+                alt={instructor.trading_name ?? instructor.name ?? ""}
+                style={{
+                  height: 56,
+                  maxWidth: 200,
+                  objectFit: "contain",
+                  marginBottom: 16,
+                  display: "block",
+                }}
+              />
+            ) : (
+              <div
+                style={{
+                  fontSize: 13,
+                  fontWeight: 700,
+                  color: alpha(T.navy, 0.8),
+                  letterSpacing: "0.15em",
+                  textTransform: "uppercase",
+                  fontFamily: FONT_HEADING,
+                  marginBottom: 16,
+                }}
+              >
+                {instructor.trading_name ?? instructor.name ?? name}
+              </div>
+            )}
             <h1
               style={{
                 fontFamily: FONT_HEADING,
