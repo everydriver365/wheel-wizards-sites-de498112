@@ -49,6 +49,36 @@ function BookPage() {
   const [notes, setNotes] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [termsChecked, setTermsChecked] = useState(false);
+
+  function clearError(field: string) {
+    setErrors((prev) => {
+      if (!prev[field]) return prev;
+      const next = { ...prev };
+      delete next[field];
+      return next;
+    });
+  }
+
+  function validateStep1(): boolean {
+    const e: Record<string, string> = {};
+    if (!firstName.trim()) e["firstName"] = "First name is required";
+    if (!lastName.trim()) e["lastName"] = "Last name is required";
+    if (!phone.trim()) e["phone"] = "Phone number is required";
+    else if (!/^[\d\s+()-]{7,15}$/.test(phone.trim())) e["phone"] = "Enter a valid phone number";
+    if (email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()))
+      e["email"] = "Enter a valid email address";
+    setErrors(e);
+    return Object.keys(e).length === 0;
+  }
+
+  function validateStep2(): boolean {
+    const e: Record<string, string> = {};
+    if (!pickupAddress.trim()) e["pickupAddress"] = "Please enter your pickup address";
+    setErrors(e);
+    return Object.keys(e).length === 0;
+  }
 
   useEffect(() => {
     let active = true;
@@ -142,14 +172,14 @@ function BookPage() {
   function handleContinue() {
     setError(null);
     if (step === 1) {
-      if (!firstName.trim() || !phone.trim()) {
-        setError("Please enter your first name and phone number");
-        return;
-      }
+      if (!validateStep1()) return;
       setStep(2);
       return;
     }
-    if (step === 2) setStep(3);
+    if (step === 2) {
+      if (!validateStep2()) return;
+      setStep(3);
+    }
   }
 
   return (
@@ -243,39 +273,52 @@ function BookPage() {
           <>
             <h1 style={{ fontSize: 22, fontWeight: 800, color: NAVY, marginBottom: 16 }}>Your details</h1>
             <Card>
-              <Row label="First name">
+              <Row label="First name" error={errors["firstName"]}>
                 <input
                   style={inputStyle}
                   value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
+                  onChange={(e) => {
+                    setFirstName(e.target.value);
+                    clearError("firstName");
+                  }}
                   placeholder="Required"
                   maxLength={60}
                 />
               </Row>
-              <Row label="Last name">
+              <Row label="Last name" error={errors["lastName"]}>
                 <input
                   style={inputStyle}
                   value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
+                  onChange={(e) => {
+                    setLastName(e.target.value);
+                    clearError("lastName");
+                  }}
+                  placeholder="Required"
                   maxLength={60}
                 />
               </Row>
-              <Row label="Phone">
+              <Row label="Phone" error={errors["phone"]}>
                 <input
                   style={inputStyle}
                   type="tel"
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  onChange={(e) => {
+                    setPhone(e.target.value);
+                    clearError("phone");
+                  }}
                   placeholder="Required"
                   maxLength={20}
                 />
               </Row>
-              <Row label="Email" last>
+              <Row label="Email" last error={errors["email"]}>
                 <input
                   style={inputStyle}
                   type="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    clearError("email");
+                  }}
                   maxLength={255}
                 />
               </Row>
@@ -287,14 +330,27 @@ function BookPage() {
           <>
             <h1 style={{ fontSize: 22, fontWeight: 800, color: NAVY, marginBottom: 16 }}>Pickup address</h1>
             <Card>
-              <div style={{ padding: "14px 16px" }}>
+              <div
+                style={{
+                  padding: "14px 16px",
+                  borderLeft: errors["pickupAddress"] ? "3px solid #CC2229" : "none",
+                }}
+              >
                 <AddressAutocompleteField
                   label="Full pickup address"
                   value={pickupAddress}
-                  onChange={setPickupAddress}
+                  onChange={(v) => {
+                    setPickupAddress(v);
+                    clearError("pickupAddress");
+                  }}
                   onPostcodeExtracted={setPostcode}
                   placeholder="Start typing your address"
                 />
+                {errors["pickupAddress"] ? (
+                  <p style={{ fontSize: 12, color: "#CC2229", marginTop: 6 }}>
+                    {errors["pickupAddress"]}
+                  </p>
+                ) : null}
               </div>
             </Card>
 
@@ -365,10 +421,36 @@ function BookPage() {
               <Row label="Phone">
                 <span style={valueStyle}>{phone || "—"}</span>
               </Row>
+              {email.trim() ? (
+                <Row label="Email">
+                  <span style={valueStyle}>{email.trim()}</span>
+                </Row>
+              ) : null}
+              <Row label="Course">
+                <span style={valueStyle}>{course?.name ?? "—"}</span>
+              </Row>
+              <Row label="Price">
+                <span style={valueStyle}>£{price}</span>
+              </Row>
               <Row label="Pickup" last>
                 <span style={valueStyle}>{pickupAddress || "—"}</span>
               </Row>
             </Card>
+
+            <label style={{ display: "flex", gap: 10, alignItems: "flex-start", marginBottom: 20 }}>
+              <input
+                type="checkbox"
+                checked={termsChecked}
+                onChange={(e) => setTermsChecked(e.target.checked)}
+                style={{ marginTop: 3, flexShrink: 0 }}
+              />
+              <span style={{ fontSize: 13, color: "#6B7686", lineHeight: 1.5 }}>
+                I confirm my details are correct and agree to the{" "}
+                <a href="/terms" target="_blank" rel="noreferrer" style={{ color: "#1877D6" }}>
+                  booking terms
+                </a>
+              </span>
+            </label>
           </>
         ) : null}
 
@@ -391,7 +473,7 @@ function BookPage() {
         <div style={{ maxWidth: 480, margin: "0 auto" }}>
           <button
             onClick={step === 3 ? generatePaymentLink : handleContinue}
-            disabled={submitting || loading}
+            disabled={submitting || loading || (step === 3 && !termsChecked)}
             style={{
               width: "100%",
               background: accent,
@@ -403,7 +485,7 @@ function BookPage() {
               fontWeight: 700,
               cursor: "pointer",
               fontFamily: FONT,
-              opacity: submitting || loading ? 0.7 : 1,
+              opacity: submitting || loading || (step === 3 && !termsChecked) ? 0.6 : 1,
             }}
           >
             {step === 3 ? (submitting ? "Creating payment…" : `Pay £${price}`) : "Continue →"}
@@ -447,21 +529,35 @@ function Card({ children }: { children: React.ReactNode }) {
   );
 }
 
-function Row({ label, children, last }: { label: string; children: React.ReactNode; last?: boolean }) {
+function Row({
+  label,
+  children,
+  last,
+  error,
+}: {
+  label: string;
+  children: React.ReactNode;
+  last?: boolean;
+  error?: string | undefined;
+}) {
   return (
     <label
       style={{
-        display: "flex",
-        alignItems: "center",
+        display: "block",
         padding: "14px 16px",
-        gap: 12,
         borderBottom: last ? "none" : "1px solid #E4E8EF",
+        borderLeft: error ? "3px solid #CC2229" : "none",
       }}
     >
-      <span style={{ fontSize: 13, fontWeight: 500, color: "#6B7686", width: 120, flexShrink: 0, fontFamily: FONT }}>
-        {label}
+      <span style={{ display: "flex", alignItems: "center", gap: 12 }}>
+        <span
+          style={{ fontSize: 13, fontWeight: 500, color: "#6B7686", width: 120, flexShrink: 0, fontFamily: FONT }}
+        >
+          {label}
+        </span>
+        {children}
       </span>
-      {children}
+      {error ? <span style={{ display: "block", fontSize: 12, color: "#CC2229", marginTop: 6 }}>{error}</span> : null}
     </label>
   );
 }
