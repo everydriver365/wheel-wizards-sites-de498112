@@ -24,6 +24,7 @@ interface CourseCardProps {
     city?: string | null;
   };
   onEnquire: () => void;
+  enquireHref?: string;
 }
 
 function courseIcon(courseType?: string | null, name?: string | null) {
@@ -34,7 +35,7 @@ function courseIcon(courseType?: string | null, name?: string | null) {
   return "🚗";
 }
 
-export default function CourseCard({ course, instructor, onEnquire }: CourseCardProps) {
+export default function CourseCard({ course, instructor, onEnquire, enquireHref }: CourseCardProps) {
   const brand = instructor.brand_colour || "#0F2044";
   const buttonColour = instructor.brand_colour || "#1877D6";
   const fromDate = formatDate(course.available_from || course.start_date);
@@ -198,11 +199,18 @@ export default function CourseCard({ course, instructor, onEnquire }: CourseCard
           <span style={{ fontSize: 12, color: "#6B7686" }}>with {withName}</span>
         </div>
 
-        <button
-          onClick={onEnquire}
+        <a
+          href={enquireHref ?? "#"}
+          onClick={(event) => {
+            event.preventDefault();
+            onEnquire();
+          }}
           style={{
             marginTop: "auto",
             width: "100%",
+            display: "block",
+            textAlign: "center",
+            textDecoration: "none",
             background: buttonColour,
             color: "#fff",
             border: "none",
@@ -216,7 +224,7 @@ export default function CourseCard({ course, instructor, onEnquire }: CourseCard
           }}
         >
           Enquire about this course
-        </button>
+        </a>
       </div>
     </article>
   );
