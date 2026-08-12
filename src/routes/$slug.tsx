@@ -38,7 +38,12 @@ async function loadSite(slug: string) {
 
   if (error || !instructor) return { instructor: null, courses: [], reviews: [] };
 
-  const [{ data: courses }, { data: reviews }] = await Promise.all([
+  console.log("[courses] instructor id:", instructor?.id);
+
+  const [
+    { data: courses, error: coursesError },
+    { data: reviews },
+  ] = await Promise.all([
     supabase
       .from("instructor_courses")
       .select(
@@ -55,6 +60,9 @@ async function loadSite(slug: string) {
       .order("created_at", { ascending: false })
       .limit(6),
   ]);
+
+  console.log("[courses] data:", courses);
+  console.log("[courses] error:", coursesError);
 
   return {
     instructor: instructor as Instructor,
