@@ -603,7 +603,11 @@ export function InstructorSite({
                     price: course.price ?? null,
                     start_date: course.start_date ?? null,
                     available_from: course.available_from ?? null,
-                    image_url: course.image_url ?? null,
+                    image_url:
+                      course.image_url ??
+                      course.course_image_url ??
+                      instructor.website_hero_image_url ??
+                      null,
                   }}
                   instructor={{
                     name: instructor.name ?? null,
