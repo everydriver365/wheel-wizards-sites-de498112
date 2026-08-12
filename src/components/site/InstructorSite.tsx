@@ -100,6 +100,18 @@ export function InstructorSite({
 
   const heroImage = instructor.website_hero_image_url || instructor.profile_image_url || "";
 
+  const gallery = useMemo<string[]>(() => {
+    const raw = instructor.website_gallery_urls;
+    if (!raw) return [];
+    if (Array.isArray(raw)) return raw.filter(Boolean).map(String);
+    try {
+      const parsed = JSON.parse(String(raw));
+      return Array.isArray(parsed) ? parsed.filter(Boolean).map(String) : [];
+    } catch {
+      return [];
+    }
+  }, [instructor.website_gallery_urls]);
+
   const stats = [
     { value: `${reviews.length}+`, label: "Happy pupils" },
     { value: instructor.dvsa_grade || "ADI", label: "DVSA grade" },
@@ -212,16 +224,15 @@ export function InstructorSite({
         }}
       >
         {heroImage ? (
-          <img
-            src={heroImage}
-            alt=""
+          <div
+            aria-hidden="true"
             style={{
               position: "absolute",
               inset: 0,
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              objectPosition: "center",
+              background: `url(${heroImage})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
             }}
           />
         ) : null}
@@ -400,6 +411,33 @@ export function InstructorSite({
       </section>
 
       {/* 5. Courses */}
+      {gallery.length > 0 ? (
+        <section id="gallery" style={{ background: T.white, padding: "72px 0", scrollMarginTop: 80 }}>
+          <div style={wrap}>
+            <Eyebrow accent={accent}>Gallery</Eyebrow>
+            <Heading>A look at lessons with {name}</Heading>
+            <div className="grid grid-cols-2 md:grid-cols-3" style={{ gap: 14 }}>
+              {gallery.map((url, index) => (
+                <img
+                  key={`${url}-${index}`}
+                  src={url}
+                  alt={`${name} driving school photo ${index + 1}`}
+                  loading="lazy"
+                  style={{
+                    width: "100%",
+                    aspectRatio: "4 / 3",
+                    objectFit: "cover",
+                    borderRadius: 16,
+                    border: `1px solid ${T.border}`,
+                    boxShadow: CARD_SHADOW_SOFT,
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
       <section id="courses" style={{ background: T.white, padding: "88px 0", scrollMarginTop: 80 }}>
         <div style={wrap}>
           <Eyebrow accent={accent}>Courses &amp; packages</Eyebrow>
