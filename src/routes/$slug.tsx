@@ -23,11 +23,18 @@ export const Route = createFileRoute("/$slug")({
 });
 
 async function loadSite(slug: string) {
-  const { data: instructor, error } = await supabase
+  console.log("[fetch] slug:", slug);
+  console.log("[fetch] supabase url:", (supabase as unknown as { supabaseUrl: string }).supabaseUrl);
+
+  const { data: instructor, error, status } = await supabase
     .from("instructors_public")
     .select("*")
     .eq("app_slug", slug)
     .single();
+
+  console.log("[fetch] data:", instructor);
+  console.log("[fetch] error:", error);
+  console.log("[fetch] status:", status);
 
   if (error || !instructor) return { instructor: null, courses: [], reviews: [] };
 
