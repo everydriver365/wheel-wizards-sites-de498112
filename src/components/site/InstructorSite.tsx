@@ -604,7 +604,7 @@ export function InstructorSite({
                     trading_name: instructor.trading_name ?? null,
                     profile_image_url: instructor.profile_image_url ?? null,
                     brand_colour: instructor.brand_colour ?? null,
-                    hourly_rate: (instructor.hourly_rate as number | null) ?? null,
+                    hourly_rate: (instructor['hourly_rate'] as number | null) ?? null,
                     city: instructor.city ?? null,
                   }}
                   onEnquire={() => goEnquire(course.name || course.course_type || "")}
