@@ -17,10 +17,10 @@ import {
 import { CARD_SHADOW_ED, CARD_SHADOW_SOFT, FONT_HEADING, T } from "@/lib/theme";
 
 const NAV_LINKS = [
-  { id: "about", label: "About" },
-  { id: "courses", label: "Courses" },
-  { id: "reviews", label: "Reviews" },
-  { id: "enquiry", label: "Contact" },
+  { id: "about", label: "About", path: "/about" },
+  { id: "courses", label: "Courses", path: "/courses" },
+  { id: "reviews", label: "Reviews", path: "/reviews" },
+  { id: "enquiry", label: "Contact", path: "/enquire" },
 ];
 
 const wrap: React.CSSProperties = { maxWidth: 1200, margin: "0 auto", padding: "0 24px" };
@@ -211,20 +211,19 @@ export function InstructorSite({
           </div>
           <nav className="hidden lg:flex" style={{ gap: 34, alignItems: "center" }}>
             {NAV_LINKS.map((link) => (
-              <button
+              <a
                 key={link.id}
-                onClick={() => (link.id === "enquiry" ? goEnquire() : scrollToId(link.id))}
+                href={`/${slug}${link.path}`}
                 style={{
                   fontSize: 15,
                   fontWeight: 700,
                   color: T.navy,
-                  background: "none",
-                  border: "none",
+                  textDecoration: "none",
                   cursor: "pointer",
                 }}
               >
                 {link.label}
-              </button>
+              </a>
             ))}
           </nav>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -803,20 +802,19 @@ export function InstructorSite({
         <p style={{ fontFamily: FONT_HEADING, fontSize: 22, fontWeight: 800, color: T.white }}>{name}</p>
         <nav style={{ display: "flex", gap: 22, justifyContent: "center", flexWrap: "wrap", margin: "20px 0" }}>
           {NAV_LINKS.map((link) => (
-            <button
+            <a
               key={link.id}
-              onClick={() => (link.id === "enquiry" ? goEnquire() : scrollToId(link.id))}
+              href={`/${slug}${link.path}`}
               style={{
                 fontSize: 14,
                 fontWeight: 600,
                 color: "rgba(255,255,255,0.55)",
-                background: "none",
-                border: "none",
+                textDecoration: "none",
                 cursor: "pointer",
               }}
             >
               {link.label}
-            </button>
+            </a>
           ))}
         </nav>
         {instructor.phone ? (
