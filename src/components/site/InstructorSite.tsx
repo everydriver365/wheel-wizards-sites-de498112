@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Clock, CalendarDays, Car, Star } from "lucide-react";
+import { Clock, CalendarDays, Car, Star, Check, Quote } from "lucide-react";
 
 import { EnquiryForm } from "./EnquiryForm";
 import {
@@ -22,6 +22,12 @@ const NAV_LINKS = [
 ];
 
 const wrap: React.CSSProperties = { maxWidth: 1200, margin: "0 auto", padding: "0 24px" };
+
+const sectionHead: React.CSSProperties = { textAlign: "center", maxWidth: 660, margin: "0 auto 44px" };
+
+function SectionLead({ children }: { children: React.ReactNode }) {
+  return <p style={{ fontSize: 17, color: T.muted, lineHeight: 1.65 }}>{children}</p>;
+}
 
 function Stars({ count = 5, color }: { count?: number; color: string }) {
   return (
@@ -560,39 +566,76 @@ export function InstructorSite({
         </section>
       ) : null}
 
-      <section id="courses" style={{ background: T.white, padding: "88px 0", scrollMarginTop: 80 }}>
+      {/* 5. Courses — EveryDriver pricing-card style */}
+      <section id="courses" style={{ background: T.white, padding: "96px 0", scrollMarginTop: 80 }}>
         <div style={wrap}>
-          <Eyebrow accent={accent}>Courses &amp; packages</Eyebrow>
-          <Heading>Choose your course</Heading>
+          <div style={sectionHead}>
+            <Eyebrow accent={accent}>Courses &amp; packages</Eyebrow>
+            <Heading>Pick the course that fits you</Heading>
+            <SectionLead>
+              Clear pricing, no hidden fees. Every course is taught one-to-one by {name} with structured
+              lesson plans and progress tracking.
+            </SectionLead>
+          </div>
           {courses.length === 0 ? (
-            <p style={{ fontSize: 16, color: T.muted }}>
+            <p style={{ fontSize: 16, color: T.muted, textAlign: "center" }}>
               Contact {instructor.name || name} to discuss available courses.
             </p>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 22 }}>
-              {courses.map((course) => {
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ gap: 24, alignItems: "stretch" }}>
+              {courses.map((course, index) => {
                 const startDate = formatDate(course.start_date || course.available_from);
+                const featured = courses.length > 1 && index === Math.min(1, courses.length - 1);
+                const features = [
+                  course.total_hours != null ? `${course.total_hours} hours of tuition` : null,
+                  course.transmission ? `${course.transmission} transmission` : null,
+                  startDate ? `Next start ${startDate}` : "Flexible start dates",
+                  "Fully qualified DVSA instructor",
+                  "Progress tracked every lesson",
+                ].filter(Boolean) as string[];
                 return (
                   <article
                     key={course.id}
                     style={{
+                      position: "relative",
                       background: T.white,
-                      borderRadius: 18,
-                      padding: 26,
-                      border: `1px solid ${T.border}`,
-                      boxShadow: CARD_SHADOW_ED,
+                      borderRadius: 22,
+                      padding: featured ? "34px 28px 28px" : "28px",
+                      border: `1px solid ${featured ? alpha(accent, 0.35) : T.border}`,
+                      boxShadow: featured ? CARD_SHADOW_ED : CARD_SHADOW_SOFT,
                       display: "flex",
                       flexDirection: "column",
-                      gap: 16,
+                      gap: 18,
+                      transform: featured ? "translateY(-8px)" : undefined,
                     }}
                   >
-                    <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                    {featured ? (
                       <span
                         style={{
-                          width: 44,
-                          height: 44,
+                          position: "absolute",
+                          top: -13,
+                          left: 28,
+                          background: accent,
+                          color: T.white,
+                          fontSize: 10,
+                          fontWeight: 800,
+                          letterSpacing: "0.1em",
+                          textTransform: "uppercase",
+                          borderRadius: 50,
+                          padding: "6px 14px",
+                        }}
+                      >
+                        Most popular
+                      </span>
+                    ) : null}
+
+                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                      <span
+                        style={{
+                          width: 42,
+                          height: 42,
                           borderRadius: 12,
-                          background: alpha(accent, 0.12),
+                          background: alpha(accent, 0.1),
                           color: accent,
                           display: "flex",
                           alignItems: "center",
@@ -605,41 +648,94 @@ export function InstructorSite({
                       <h3
                         style={{
                           fontFamily: FONT_HEADING,
-                          fontSize: 17,
-                          fontWeight: 700,
+                          fontSize: 19,
+                          fontWeight: 800,
                           color: T.navy,
-                          flex: 1,
+                          lineHeight: 1.3,
                         }}
                       >
                         {course.name || course.course_type || "Driving course"}
                       </h3>
+                    </div>
+
+                    <div style={{ display: "flex", alignItems: "flex-end", gap: 8 }}>
                       {course.price != null ? (
+                        <>
+                          <span
+                            style={{
+                              fontFamily: FONT_HEADING,
+                              fontSize: 40,
+                              fontWeight: 800,
+                              color: T.navy,
+                              lineHeight: 1,
+                            }}
+                          >
+                            £{course.price}
+                          </span>
+                          <span style={{ fontSize: 13, color: T.muted, fontWeight: 600, paddingBottom: 4 }}>
+                            per course
+                          </span>
+                        </>
+                      ) : (
                         <span
                           style={{
                             fontFamily: FONT_HEADING,
-                            fontSize: 20,
+                            fontSize: 26,
                             fontWeight: 800,
-                            color: accent,
-                            whiteSpace: "nowrap",
+                            color: T.navy,
                           }}
                         >
-                          £{course.price}
+                          Price on enquiry
                         </span>
-                      ) : null}
+                      )}
                     </div>
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: 16, alignItems: "center" }}>
+
+                    {course.description ? (
+                      <p style={{ fontSize: 14.5, color: T.muted, lineHeight: 1.65 }}>{course.description}</p>
+                    ) : null}
+
+                    <div style={{ height: 1, background: T.border }} />
+
+                    <ul style={{ display: "flex", flexDirection: "column", gap: 11, listStyle: "none" }}>
+                      {features.map((feature) => (
+                        <li
+                          key={feature}
+                          style={{ display: "flex", gap: 10, alignItems: "flex-start", fontSize: 14, color: T.navy }}
+                        >
+                          <span
+                            style={{
+                              width: 19,
+                              height: 19,
+                              borderRadius: 999,
+                              background: alpha(accent, 0.12),
+                              color: accent,
+                              display: "inline-flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              flexShrink: 0,
+                              marginTop: 1,
+                            }}
+                          >
+                            <Check size={12} strokeWidth={3} />
+                          </span>
+                          <span style={{ fontWeight: 500 }}>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 14, marginTop: 2 }}>
                       {course.total_hours != null ? (
                         <span
                           style={{
                             display: "inline-flex",
                             alignItems: "center",
                             gap: 6,
-                            fontSize: 13,
+                            fontSize: 12.5,
                             color: T.muted,
                             fontWeight: 600,
                           }}
                         >
-                          <Clock size={14} /> {course.total_hours} hours
+                          <Clock size={13} /> {course.total_hours} hrs
                         </span>
                       ) : null}
                       {startDate ? (
@@ -648,50 +744,32 @@ export function InstructorSite({
                             display: "inline-flex",
                             alignItems: "center",
                             gap: 6,
-                            fontSize: 13,
+                            fontSize: 12.5,
                             color: T.muted,
                             fontWeight: 600,
                           }}
                         >
-                          <CalendarDays size={14} /> Starts {startDate}
-                        </span>
-                      ) : null}
-                      {course.transmission ? (
-                        <span
-                          style={{
-                            fontSize: 11,
-                            fontWeight: 700,
-                            color: T.teal,
-                            background: "#EAF6F8",
-                            borderRadius: 50,
-                            padding: "4px 11px",
-                            textTransform: "uppercase",
-                            letterSpacing: "0.04em",
-                          }}
-                        >
-                          {course.transmission}
+                          <CalendarDays size={13} /> {startDate}
                         </span>
                       ) : null}
                     </div>
-                    {course.description ? (
-                      <p style={{ fontSize: 14, color: T.muted, lineHeight: 1.65 }}>{course.description}</p>
-                    ) : null}
+
                     <button
                       onClick={() => goEnquire(course.name || course.course_type || "")}
                       style={{
                         marginTop: "auto",
                         width: "100%",
-                        background: accent,
-                        color: T.white,
-                        border: "none",
+                        background: featured ? accent : T.white,
+                        color: featured ? T.white : accent,
+                        border: `1.5px solid ${accent}`,
                         borderRadius: 12,
-                        padding: 13,
-                        fontSize: 14,
+                        padding: 14,
+                        fontSize: 14.5,
                         fontWeight: 700,
                         cursor: "pointer",
                       }}
                     >
-                      Enquire about this course
+                      Book this course
                     </button>
                   </article>
                 );
@@ -701,39 +779,90 @@ export function InstructorSite({
         </div>
       </section>
 
-      {/* 6. Reviews */}
+      {/* 6. Reviews — EveryDriver testimonial style */}
       {reviews.length > 0 ? (
-        <section id="reviews" style={{ background: T.surface, padding: "88px 0", scrollMarginTop: 80 }}>
+        <section id="reviews" style={{ background: T.surface, padding: "96px 0", scrollMarginTop: 80 }}>
           <div style={wrap}>
-            <Eyebrow accent={accent}>Reviews</Eyebrow>
-            <Heading>What pupils say</Heading>
-            <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 18 }}>
+            <div style={sectionHead}>
+              <Eyebrow accent={accent}>Reviews</Eyebrow>
+              <Heading>Loved by learners</Heading>
+              <div
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 12,
+                  background: T.white,
+                  border: `1px solid ${T.border}`,
+                  boxShadow: CARD_SHADOW_SOFT,
+                  borderRadius: 50,
+                  padding: "10px 20px",
+                }}
+              >
+                <Stars count={avgRating || 5} color={accent} />
+                <span style={{ fontFamily: FONT_HEADING, fontSize: 15, fontWeight: 800, color: T.navy }}>
+                  {(avgRating || 5).toFixed(1)}
+                </span>
+                <span style={{ fontSize: 13, color: T.muted, fontWeight: 600 }}>
+                  from {reviews.length} review{reviews.length === 1 ? "" : "s"}
+                </span>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ gap: 22 }}>
               {reviews.map((review) => (
                 <article
                   key={review.id}
                   style={{
+                    position: "relative",
                     background: T.white,
-                    borderRadius: 16,
-                    padding: 24,
+                    borderRadius: 20,
+                    padding: 28,
                     border: `1px solid ${T.border}`,
                     boxShadow: CARD_SHADOW_SOFT,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 14,
                   }}
                 >
+                  <Quote size={26} color={alpha(accent, 0.22)} fill={alpha(accent, 0.22)} strokeWidth={0} />
                   <Stars count={review.rating ?? 5} color={accent} />
-                  <p
-                    style={{
-                      fontSize: 16,
-                      color: T.navy,
-                      lineHeight: 1.65,
-                      margin: "12px 0 16px",
-                    }}
-                  >
-                    “{review.review_text}”
+                  <p style={{ fontSize: 15.5, color: T.navy, lineHeight: 1.7, flex: 1 }}>
+                    {review.review_text}
                   </p>
-                  <p style={{ fontSize: 13, fontWeight: 700, color: T.navy }}>
-                    {review.pupil_name || "Pupil"}
-                  </p>
-                  <p style={{ fontSize: 11, color: "#9CA3AF" }}>{formatDate(review.created_at)}</p>
+                  <div style={{ display: "flex", alignItems: "center", gap: 12, paddingTop: 4 }}>
+                    <span
+                      style={{
+                        width: 38,
+                        height: 38,
+                        borderRadius: 999,
+                        background: alpha(accent, 0.12),
+                        color: accent,
+                        display: "inline-flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontFamily: FONT_HEADING,
+                        fontSize: 14,
+                        fontWeight: 800,
+                        flexShrink: 0,
+                      }}
+                    >
+                      {(review.pupil_name || "P").trim().charAt(0).toUpperCase()}
+                    </span>
+                    <span>
+                      <span
+                        style={{
+                          display: "block",
+                          fontSize: 13.5,
+                          fontWeight: 700,
+                          color: T.navy,
+                        }}
+                      >
+                        {review.pupil_name || "Pupil"}
+                      </span>
+                      <span style={{ display: "block", fontSize: 11.5, color: "#9CA3AF" }}>
+                        {formatDate(review.created_at)}
+                      </span>
+                    </span>
+                  </div>
                 </article>
               ))}
             </div>
