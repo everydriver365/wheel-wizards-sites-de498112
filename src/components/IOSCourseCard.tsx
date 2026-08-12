@@ -1,7 +1,8 @@
-import { darken } from "@/lib/site";
+import { DEFAULT_ACCENT, darken } from "@/lib/site";
 
 const FONT = "'Poppins', 'Manrope', system-ui, sans-serif";
 const NAVY = "#0F2044";
+const DEEP_BLUE = DEFAULT_ACCENT; // #1A4A6E — EveryDriver deep blue
 const TEAL = "#2D8A9E";
 
 interface IOSCourseCardProps {
@@ -99,7 +100,7 @@ function GearIcon() {
 }
 
 export default function IOSCourseCard({ course, instructor, onEnquire, enquireHref }: IOSCourseCardProps) {
-  const brand = instructor.brand_colour || NAVY;
+  const brand = DEEP_BLUE;
   const title = course.name || `${course.total_hours ?? ""} hour driving lessons`.trim();
   const date = splitDate(course.available_from || course.start_date);
   const withName = instructor.trading_name || instructor.name || "your instructor";
