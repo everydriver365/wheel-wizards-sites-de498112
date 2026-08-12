@@ -25,6 +25,7 @@ export type Course = {
   price?: number | null;
   start_date?: string | null;
   image_url?: string | null;
+  course_image_url?: string | null;
   description?: string | null;
   transmission?: string | null;
   available_from?: string | null;
