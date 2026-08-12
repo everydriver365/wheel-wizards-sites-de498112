@@ -12,7 +12,7 @@ import {
 
 export const Route = createFileRoute("/$slug/enquire")({
   validateSearch: (search: Record<string, unknown>) => ({
-    course: typeof search.course === "string" ? search.course : undefined,
+    course: typeof search["course"] === "string" ? (search["course"] as string) : undefined,
   }),
   head: () => ({
     meta: [
