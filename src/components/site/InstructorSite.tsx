@@ -449,7 +449,13 @@ export function InstructorSite({
 
       {/* 3. Stats bar */}
       <section style={{ background: T.white, padding: "30px 0", borderBottom: `1px solid ${T.navBorder}` }}>
-        <div style={{ ...wrap, display: "grid", gridTemplateColumns: "repeat(4, 1fr)" }}>
+        <div
+          style={{
+            ...wrap,
+            display: "grid",
+            gridTemplateColumns: `repeat(${stats.length}, 1fr)`,
+          }}
+        >
           {stats.map((stat, index) => (
             <div
               key={stat.label}
