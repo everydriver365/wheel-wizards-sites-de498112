@@ -24,9 +24,9 @@ const SlugIndexRoute = SlugIndexRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const SlugEnquireRoute = SlugEnquireRouteImport.update({
-  id: '/enquire',
-  path: '/enquire',
-  getParentRoute: () => SlugRoute,
+  id: '/$slug/enquire',
+  path: '/$slug/enquire',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -55,6 +55,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SlugEnquireRoute: typeof SlugEnquireRoute
   SlugIndexRoute: typeof SlugIndexRoute
 }
 
@@ -76,16 +77,17 @@ declare module '@tanstack/react-router' {
     }
     '/$slug/enquire': {
       id: '/$slug/enquire'
-      path: '/enquire'
+      path: '/$slug/enquire'
       fullPath: '/$slug/enquire'
       preLoaderRoute: typeof SlugEnquireRouteImport
-      parentRoute: typeof SlugRoute
+      parentRoute: typeof rootRouteImport
     }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SlugEnquireRoute: SlugEnquireRoute,
   SlugIndexRoute: SlugIndexRoute,
 }
 export const routeTree = rootRouteImport
