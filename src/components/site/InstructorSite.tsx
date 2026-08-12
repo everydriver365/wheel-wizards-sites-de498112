@@ -212,16 +212,15 @@ export function InstructorSite({
         }}
       >
         {heroImage ? (
-          <img
-            src={heroImage}
-            alt=""
+          <div
+            aria-hidden="true"
             style={{
               position: "absolute",
               inset: 0,
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              objectPosition: "center",
+              background: `url(${heroImage})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
             }}
           />
         ) : null}
