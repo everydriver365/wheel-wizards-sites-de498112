@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 
+import AddressAutocompleteField from "@/components/AddressAutocomplete";
 import { supabase } from "@/lib/supabase";
 import {
   COURSE_INTERESTS,
@@ -9,33 +10,32 @@ import {
   displayName,
   type Instructor,
 } from "@/lib/site";
+import { FONT_HEADING, T } from "@/lib/theme";
 
 const inputStyle: React.CSSProperties = {
   width: "100%",
   padding: "12px 14px",
   fontSize: 15,
   fontFamily: "inherit",
-  color: "#0B1F3A",
-  background: "#F8F9FB",
-  border: "1px solid #E4E8EF",
-  borderRadius: 12,
+  color: T.navy,
+  background: T.white,
+  border: `1px solid ${T.border}`,
+  borderRadius: 10,
   outline: "none",
+};
+
+const labelStyle: React.CSSProperties = {
+  display: "block",
+  fontSize: 13,
+  fontWeight: 500,
+  color: T.muted,
+  marginBottom: 6,
 };
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label style={{ display: "block", textAlign: "left" }}>
-      <span
-        style={{
-          display: "block",
-          fontSize: 12,
-          fontWeight: 700,
-          color: "#6B7686",
-          marginBottom: 6,
-        }}
-      >
-        {label}
-      </span>
+      <span style={labelStyle}>{label}</span>
       {children}
     </label>
   );
@@ -54,12 +54,13 @@ export function EnquiryForm({
 }) {
   const [sent, setSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [address, setAddress] = useState("");
+  const [postcode, setPostcode] = useState("");
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
     phone: "",
     email: "",
-    address: "",
     transmission: "No preference",
     hours: "",
     timing: "Flexible",
@@ -67,8 +68,10 @@ export function EnquiryForm({
     message: "",
   });
 
-  const set = (key: keyof typeof form) => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
-    setForm((prev) => ({ ...prev, [key]: event.target.value }));
+  const set =
+    (key: keyof typeof form) =>
+    (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
+      setForm((prev) => ({ ...prev, [key]: event.target.value }));
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -77,16 +80,15 @@ export function EnquiryForm({
       return;
     }
     setSubmitting(true);
-    const postcodeMatch = form.address
-      .toUpperCase()
-      .match(/[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2}/);
+    const derivedPostcode =
+      postcode || address.toUpperCase().match(/[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2}/)?.[0] || null;
 
     const { error } = await supabase.from("enquiries").insert({
       instructor_id: instructor.id,
       name: `${form.firstName.trim()} ${form.lastName.trim()}`,
       phone: form.phone.trim(),
       email: form.email.trim() || null,
-      postcode: postcodeMatch ? postcodeMatch[0] : null,
+      postcode: derivedPostcode,
       course_interest: courseInterest || null,
       transmission: form.transmission,
       requested_hours: form.hours ? Number(form.hours) : null,
@@ -104,16 +106,17 @@ export function EnquiryForm({
     setSent(true);
   }
 
+  const cardStyle: React.CSSProperties = {
+    background: T.white,
+    borderRadius: 24,
+    padding: 32,
+    border: `1px solid ${T.border}`,
+    boxShadow: "0 1px 2px rgba(12,35,64,0.04), 0 18px 44px rgba(12,35,64,0.09)",
+  };
+
   if (sent) {
     return (
-      <div
-        style={{
-          background: "#fff",
-          borderRadius: 24,
-          padding: 32,
-          boxShadow: "0 4px 0 #E4E4E8, 0 16px 48px rgba(11,31,58,0.1)",
-        }}
-      >
+      <div style={cardStyle}>
         <div
           style={{
             width: 64,
@@ -131,8 +134,10 @@ export function EnquiryForm({
         >
           ✓
         </div>
-        <h3 style={{ fontSize: 22, fontWeight: 800, color: "#0B1F3A" }}>Enquiry sent!</h3>
-        <p style={{ fontSize: 15, color: "#6B7686", marginTop: 8 }}>
+        <h3 style={{ fontFamily: FONT_HEADING, fontSize: 22, fontWeight: 700, color: T.navy }}>
+          Enquiry sent!
+        </h3>
+        <p style={{ fontSize: 15, color: T.muted, marginTop: 8 }}>
           {displayName(instructor)} will be in touch soon.
         </p>
       </div>
@@ -140,17 +145,7 @@ export function EnquiryForm({
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      style={{
-        background: "#fff",
-        borderRadius: 24,
-        padding: 32,
-        boxShadow: "0 4px 0 #E4E4E8, 0 16px 48px rgba(11,31,58,0.1)",
-        display: "grid",
-        gap: 14,
-      }}
-    >
+    <form onSubmit={handleSubmit} style={{ ...cardStyle, display: "grid", gap: 14 }}>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
         <Field label="First name *">
           <input style={inputStyle} value={form.firstName} onChange={set("firstName")} required maxLength={60} />
@@ -165,16 +160,16 @@ export function EnquiryForm({
       <Field label="Email">
         <input style={inputStyle} type="email" value={form.email} onChange={set("email")} maxLength={255} />
       </Field>
-      <Field label="Pickup address">
-        <input
+      <div style={{ textAlign: "left" }}>
+        <AddressAutocompleteField
+          label="Pickup address"
+          value={address}
+          onChange={setAddress}
+          onPostcodeExtracted={setPostcode}
+          placeholder="Start typing your address"
           style={inputStyle}
-          value={form.address}
-          onChange={set("address")}
-          placeholder="Street and postcode"
-          maxLength={200}
-          autoComplete="street-address"
         />
-      </Field>
+      </div>
       <Field label="Course interest">
         <select
           style={inputStyle}
@@ -231,8 +226,8 @@ export function EnquiryForm({
         style={{
           width: "100%",
           background: accent,
-          color: "#fff",
-          borderRadius: 16,
+          color: T.white,
+          borderRadius: 14,
           padding: 16,
           fontSize: 16,
           fontWeight: 700,

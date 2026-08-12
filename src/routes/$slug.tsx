@@ -68,11 +68,11 @@ function InstructorPage() {
       <main
         style={{
           minHeight: "100dvh",
-          background: "#0B1F3A",
+          background: "#0C2340",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          fontFamily: "Poppins, system-ui, sans-serif",
+          fontFamily: "'Manrope', system-ui, sans-serif",
         }}
       >
         <div
@@ -93,17 +93,17 @@ function InstructorPage() {
       <main
         style={{
           minHeight: "100dvh",
-          background: "#0B1F3A",
+          background: "#0C2340",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
           textAlign: "center",
           padding: 24,
-          fontFamily: "Poppins, system-ui, sans-serif",
+          fontFamily: "'Manrope', system-ui, sans-serif",
         }}
       >
-        <h1 style={{ fontSize: 26, fontWeight: 800, color: "#fff" }}>Instructor not found</h1>
+        <h1 style={{ fontFamily: "'Sora', sans-serif", fontSize: 28, fontWeight: 800, color: "#fff" }}>Instructor not found</h1>
         <p style={{ fontSize: 15, color: "rgba(255,255,255,0.6)", marginTop: 10, maxWidth: 380 }}>
           This page doesn't exist or has been removed.
         </p>
@@ -111,7 +111,7 @@ function InstructorPage() {
           href="https://everydriver.co.uk"
           style={{
             marginTop: 24,
-            background: "#1877D6",
+            background: "#1A4A6E",
             color: "#fff",
             borderRadius: 50,
             padding: "12px 26px",

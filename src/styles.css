@@ -142,3 +142,47 @@
     color: var(--color-foreground);
   }
 }
+
+/* ── EveryDriver design system base (copied from the EveryDriver project) ── */
+:root {
+  --ed-navy: #0C2340;
+  --ed-primary: #1A4A6E;
+  --ed-teal: #2D8A9E;
+  --ed-surface: #F3F8FF;
+  --ed-icon-bg: #EAF3FB;
+  --ed-border: #E8EDF2;
+  --ed-nav-border: #EEF2F7;
+  --ed-muted: #5A6B82;
+}
+
+html,
+body {
+  font-family: "Manrope", system-ui, -apple-system, sans-serif;
+  color: var(--ed-navy);
+  background: #ffffff;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Sora", "Manrope", system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button {
+  font-family: inherit;
+}
+
+input,
+select,
+textarea {
+  font-family: inherit;
+}
