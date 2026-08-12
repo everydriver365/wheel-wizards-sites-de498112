@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Star, Quote } from "lucide-react";
 
 import CourseCard from "@/components/CourseCard";
-import { EnquiryForm } from "./EnquiryForm";
+import { useNavigate } from "@tanstack/react-router";
 import {
   DEFAULT_ACCENT,
   alpha,
@@ -90,7 +90,8 @@ export function InstructorSite({
   const accent = instructor.brand_colour || DEFAULT_ACCENT;
   const name = displayName(instructor);
   const [scrolled, setScrolled] = useState(false);
-  const [courseInterest, setCourseInterest] = useState("");
+  const navigate = useNavigate();
+  const slug = String(instructor.app_slug ?? "");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 100);
@@ -135,9 +136,15 @@ export function InstructorSite({
     instructor.dbs_uploaded ? "DBS Checked" : null,
   ].filter(Boolean) as string[];
 
+  const enquireHref = (interest?: string) =>
+    `/${slug}/enquire${interest ? `?course=${encodeURIComponent(interest)}` : ""}`;
+
   const goEnquire = (interest?: string) => {
-    if (interest) setCourseInterest(interest);
-    scrollToId("enquiry");
+    navigate({
+      to: "/$slug/enquire",
+      params: { slug },
+      search: interest ? { course: interest } : {},
+    });
   };
 
   return (

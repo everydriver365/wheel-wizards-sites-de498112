@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SlugRouteImport } from './routes/$slug'
+import { Route as SlugEnquireRouteImport } from './routes/$slug.enquire'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,31 +23,39 @@ const SlugRoute = SlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SlugEnquireRoute = SlugEnquireRouteImport.update({
+  id: '/enquire',
+  path: '/enquire',
+  getParentRoute: () => SlugRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/$slug': typeof SlugRoute
+  '/$slug': typeof SlugRouteWithChildren
+  '/$slug/enquire': typeof SlugEnquireRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/$slug': typeof SlugRoute
+  '/$slug': typeof SlugRouteWithChildren
+  '/$slug/enquire': typeof SlugEnquireRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/$slug': typeof SlugRoute
+  '/$slug': typeof SlugRouteWithChildren
+  '/$slug/enquire': typeof SlugEnquireRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/$slug'
+  fullPaths: '/' | '/$slug' | '/$slug/enquire'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/$slug'
-  id: '__root__' | '/' | '/$slug'
+  to: '/' | '/$slug' | '/$slug/enquire'
+  id: '__root__' | '/' | '/$slug' | '/$slug/enquire'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  SlugRoute: typeof SlugRoute
+  SlugRoute: typeof SlugRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +74,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/$slug/enquire': {
+      id: '/$slug/enquire'
+      path: '/enquire'
+      fullPath: '/$slug/enquire'
+      preLoaderRoute: typeof SlugEnquireRouteImport
+      parentRoute: typeof SlugRoute
+    }
   }
 }
 
+interface SlugRouteChildren {
+  SlugEnquireRoute: typeof SlugEnquireRoute
+}
+
+const SlugRouteChildren: SlugRouteChildren = {
+  SlugEnquireRoute: SlugEnquireRoute,
+}
+
+const SlugRouteWithChildren = SlugRoute._addFileChildren(SlugRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  SlugRoute: SlugRoute,
+  SlugRoute: SlugRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
