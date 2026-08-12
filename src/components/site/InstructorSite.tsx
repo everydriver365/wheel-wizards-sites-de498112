@@ -113,11 +113,12 @@ export function InstructorSite({
   }, [instructor.website_gallery_urls]);
 
   const stats = [
-    { value: `${reviews.length}+`, label: "Happy pupils" },
+    reviews.length ? { value: `${reviews.length}+`, label: "Happy pupils" } : null,
     { value: instructor.dvsa_grade || "ADI", label: "DVSA grade" },
     { value: instructor.dvsa_type || "Qualified", label: "Licence type" },
-    { value: `${courses.length}+`, label: "Courses" },
-  ];
+    courses.length ? { value: `${courses.length}`, label: "Courses" } : null,
+    { value: instructor.dbs_uploaded ? "DBS" : "Vetted", label: "Background check" },
+  ].filter(Boolean) as { value: string; label: string }[];
 
   const badges = [
     instructor.dvsa_type ? String(instructor.dvsa_type).toUpperCase() : null,
