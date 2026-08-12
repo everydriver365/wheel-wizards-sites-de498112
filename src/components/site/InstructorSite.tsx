@@ -411,6 +411,33 @@ export function InstructorSite({
       </section>
 
       {/* 5. Courses */}
+      {gallery.length > 0 ? (
+        <section id="gallery" style={{ background: T.white, padding: "72px 0", scrollMarginTop: 80 }}>
+          <div style={wrap}>
+            <Eyebrow accent={accent}>Gallery</Eyebrow>
+            <Heading>A look at lessons with {name}</Heading>
+            <div className="grid grid-cols-2 md:grid-cols-3" style={{ gap: 14 }}>
+              {gallery.map((url, index) => (
+                <img
+                  key={`${url}-${index}`}
+                  src={url}
+                  alt={`${name} driving school photo ${index + 1}`}
+                  loading="lazy"
+                  style={{
+                    width: "100%",
+                    aspectRatio: "4 / 3",
+                    objectFit: "cover",
+                    borderRadius: 16,
+                    border: `1px solid ${T.border}`,
+                    boxShadow: CARD_SHADOW_SOFT,
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
       <section id="courses" style={{ background: T.white, padding: "88px 0", scrollMarginTop: 80 }}>
         <div style={wrap}>
           <Eyebrow accent={accent}>Courses &amp; packages</Eyebrow>
