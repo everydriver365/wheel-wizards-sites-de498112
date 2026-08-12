@@ -606,7 +606,6 @@ export function InstructorSite({
                     image_url:
                       course.image_url ??
                       course.course_image_url ??
-                      instructor.website_hero_image_url ??
                       null,
                   }}
                   instructor={{
