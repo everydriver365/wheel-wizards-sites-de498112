@@ -203,10 +203,6 @@ export function InstructorSite({
             {NAV_LINKS.map((link) => (
               <button
                 key={link.id}
-                style={{
-                  fontSize: 15,
-                  fontWeight: 700,
-                  color: T.navy,
                 onClick={() => (link.id === "enquiry" ? goEnquire() : scrollToId(link.id))}
                 style={{
                   fontSize: 15,
