@@ -592,7 +592,18 @@ export function InstructorSite({
             </p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 28, alignItems: "stretch" }}>
-              {courses.map((course) => (
+              {courses.map((course) => {
+                console.log(
+                  "[course card]",
+                  course.name,
+                  "image_url:",
+                  course.image_url,
+                  "course_image_url:",
+                  course.course_image_url,
+                  "resolved image prop:",
+                  course.image_url ?? course.course_image_url ?? null,
+                );
+                return (
                 <IOSCourseCard
                   key={course.id}
                   course={{
@@ -618,7 +629,8 @@ export function InstructorSite({
                   onEnquire={() => goEnquire(course.name || course.course_type || "")}
                   enquireHref={enquireHref(course.course_type || course.name || "")}
                 />
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
