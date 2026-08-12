@@ -49,7 +49,7 @@ export function displayName(instructor: Instructor) {
 export function darken(hex: string, ratio = 0.25) {
   const m = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
   if (!m) return hex;
-  const int = parseInt(m[1], 16);
+  const int = parseInt(m[1]!, 16);
   const r = Math.round(((int >> 16) & 255) * (1 - ratio));
   const g = Math.round(((int >> 8) & 255) * (1 - ratio));
   const b = Math.round((int & 255) * (1 - ratio));
@@ -60,7 +60,7 @@ export function darken(hex: string, ratio = 0.25) {
 export function alpha(hex: string, a: number) {
   const m = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
   if (!m) return hex;
-  const int = parseInt(m[1], 16);
+  const int = parseInt(m[1]!, 16);
   return `rgba(${(int >> 16) & 255}, ${(int >> 8) & 255}, ${int & 255}, ${a})`;
 }
 
