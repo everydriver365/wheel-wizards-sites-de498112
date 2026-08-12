@@ -10,7 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as SlugRouteImport } from './routes/$slug'
+import { Route as SlugIndexRouteImport } from './routes/$slug.index'
 import { Route as SlugEnquireRouteImport } from './routes/$slug.enquire'
 
 const IndexRoute = IndexRouteImport.update({
@@ -18,9 +18,9 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SlugRoute = SlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
+const SlugIndexRoute = SlugIndexRouteImport.update({
+  id: '/$slug/',
+  path: '/$slug/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SlugEnquireRoute = SlugEnquireRouteImport.update({
@@ -31,31 +31,31 @@ const SlugEnquireRoute = SlugEnquireRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/$slug': typeof SlugRouteWithChildren
   '/$slug/enquire': typeof SlugEnquireRoute
+  '/$slug/': typeof SlugIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/$slug': typeof SlugRouteWithChildren
   '/$slug/enquire': typeof SlugEnquireRoute
+  '/$slug': typeof SlugIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/$slug': typeof SlugRouteWithChildren
   '/$slug/enquire': typeof SlugEnquireRoute
+  '/$slug/': typeof SlugIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/$slug' | '/$slug/enquire'
+  fullPaths: '/' | '/$slug/enquire' | '/$slug/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/$slug' | '/$slug/enquire'
-  id: '__root__' | '/' | '/$slug' | '/$slug/enquire'
+  to: '/' | '/$slug/enquire' | '/$slug'
+  id: '__root__' | '/' | '/$slug/enquire' | '/$slug/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  SlugRoute: typeof SlugRouteWithChildren
+  SlugIndexRoute: typeof SlugIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -67,11 +67,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/$slug': {
-      id: '/$slug'
+    '/$slug/': {
+      id: '/$slug/'
       path: '/$slug'
-      fullPath: '/$slug'
-      preLoaderRoute: typeof SlugRouteImport
+      fullPath: '/$slug/'
+      preLoaderRoute: typeof SlugIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/$slug/enquire': {
@@ -84,19 +84,9 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface SlugRouteChildren {
-  SlugEnquireRoute: typeof SlugEnquireRoute
-}
-
-const SlugRouteChildren: SlugRouteChildren = {
-  SlugEnquireRoute: SlugEnquireRoute,
-}
-
-const SlugRouteWithChildren = SlugRoute._addFileChildren(SlugRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  SlugRoute: SlugRouteWithChildren,
+  SlugIndexRoute: SlugIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
