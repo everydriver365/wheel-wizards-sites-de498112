@@ -616,6 +616,7 @@ export function InstructorSite({
                     city: instructor.city ?? null,
                   }}
                   onEnquire={() => goEnquire(course.name || course.course_type || "")}
+                  enquireHref={enquireHref(course.course_type || course.name || "")}
                 />
               ))}
             </div>
