@@ -49,6 +49,11 @@ async function loadSite(slug: string) {
       .limit(6),
   ]);
 
+  console.log(
+    "[courses] raw data:",
+    (courses as Course[] | null)?.map((c) => ({ id: c.id, name: c.name, image_url: c.image_url })),
+  );
+
   return {
     instructor: instructor as Instructor,
     courses: (courses as Course[] | null) ?? [],
