@@ -294,9 +294,9 @@ export function InstructorSite({
         >
           {/* left: copy */}
           <div>
-            {instructor.logo_url ? (
+            {instructor["logo_url"] ? (
               <img
-                src={instructor.logo_url}
+                src={String(instructor["logo_url"])}
                 alt={instructor.trading_name ?? instructor.name ?? ""}
                 style={{
                   height: 56,
