@@ -179,7 +179,7 @@ export function InstructorSite({
               <img
                 src={String(instructor["logo_url"])}
                 alt={instructor.trading_name ?? instructor.name ?? ""}
-                style={{ height: 32, maxWidth: 120, objectFit: "contain" }}
+                style={{ height: 52, maxWidth: 200, objectFit: "contain" }}
               />
             ) : (
               <>
