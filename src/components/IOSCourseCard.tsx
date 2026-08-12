@@ -22,6 +22,7 @@ interface IOSCourseCardProps {
     brand_colour?: string | null;
     city?: string | null;
     postcode?: string | null;
+    car_type?: string | null;
   };
   onEnquire?: () => void;
   enquireHref?: string;
@@ -106,7 +107,9 @@ export default function IOSCourseCard({ course, instructor, onEnquire, enquireHr
   const withName = instructor.trading_name || instructor.name || "your instructor";
   const location = [instructor.city, instructor.postcode].filter(Boolean).join(" · ");
   const type = typeLabel(course.course_type, course.name);
-  const transmission = transmissionLabel(`${course.course_type ?? ""} ${course.name ?? ""}`);
+  const transmission = instructor.car_type
+    ? transmissionLabel(instructor.car_type)
+    : transmissionLabel(`${course.course_type ?? ""} ${course.name ?? ""}`);
 
   return (
     <a
