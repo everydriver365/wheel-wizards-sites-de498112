@@ -538,7 +538,7 @@ function Row({
   label: string;
   children: React.ReactNode;
   last?: boolean;
-  error?: string;
+  error?: string | undefined;
 }) {
   return (
     <label
