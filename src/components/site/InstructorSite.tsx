@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Star, Quote } from "lucide-react";
 
-import CourseCard from "@/components/CourseCard";
+import IOSCourseCard from "@/components/IOSCourseCard";
 import { useNavigate } from "@tanstack/react-router";
 import {
   DEFAULT_ACCENT,
@@ -591,9 +591,9 @@ export function InstructorSite({
               Contact {instructor.name || name} to discuss available courses.
             </p>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ gap: 24, alignItems: "stretch" }}>
+            <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 28, alignItems: "stretch" }}>
               {courses.map((course) => (
-                <CourseCard
+                <IOSCourseCard
                   key={course.id}
                   course={{
                     id: course.id,
@@ -604,16 +604,13 @@ export function InstructorSite({
                     start_date: course.start_date ?? null,
                     available_from: course.available_from ?? null,
                     image_url: course.image_url ?? null,
-                    description: course.description ?? null,
                   }}
                   instructor={{
-                    id: instructor.id,
                     name: instructor.name ?? null,
                     trading_name: instructor.trading_name ?? null,
-                    profile_image_url: instructor.profile_image_url ?? null,
                     brand_colour: instructor.brand_colour ?? null,
-                    hourly_rate: (instructor['hourly_rate'] as number | null) ?? null,
                     city: instructor.city ?? null,
+                    postcode: instructor.postcode ?? null,
                   }}
                   onEnquire={() => goEnquire(course.name || course.course_type || "")}
                   enquireHref={enquireHref(course.course_type || course.name || "")}
