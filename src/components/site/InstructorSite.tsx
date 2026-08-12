@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Clock, CalendarDays, Car, Star, Check, Quote } from "lucide-react";
+import { Star, Quote } from "lucide-react";
 
 import CourseCard from "@/components/CourseCard";
 import { EnquiryForm } from "./EnquiryForm";
