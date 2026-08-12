@@ -113,11 +113,12 @@ export function InstructorSite({
   }, [instructor.website_gallery_urls]);
 
   const stats = [
-    { value: `${reviews.length}+`, label: "Happy pupils" },
+    reviews.length ? { value: `${reviews.length}+`, label: "Happy pupils" } : null,
     { value: instructor.dvsa_grade || "ADI", label: "DVSA grade" },
     { value: instructor.dvsa_type || "Qualified", label: "Licence type" },
-    { value: `${courses.length}+`, label: "Courses" },
-  ];
+    courses.length ? { value: `${courses.length}`, label: "Courses" } : null,
+    { value: instructor.dbs_uploaded ? "DBS" : "Vetted", label: "Background check" },
+  ].filter(Boolean) as { value: string; label: string }[];
 
   const badges = [
     instructor.dvsa_type ? String(instructor.dvsa_type).toUpperCase() : null,
@@ -134,21 +135,17 @@ export function InstructorSite({
 
   return (
     <div style={{ background: T.white, color: T.navy }}>
-      {/* 1. Sticky nav */}
+      {/* 1. Sticky nav — EveryDriver style: always visible, white, wordmark + links + two CTAs */}
       <header
         style={{
-          position: "fixed",
+          position: "sticky",
           top: 0,
-          left: 0,
-          right: 0,
           height: 80,
           background: T.white,
           borderBottom: `1px solid ${T.navBorder}`,
           zIndex: 50,
-          transform: scrolled ? "translateY(0)" : "translateY(-100%)",
-          opacity: scrolled ? 1 : 0,
-          transition: "transform 220ms ease, opacity 220ms ease",
-          pointerEvents: scrolled ? "auto" : "none",
+          boxShadow: scrolled ? "0 6px 20px rgba(12,35,64,0.06)" : "none",
+          transition: "box-shadow 220ms ease",
         }}
       >
         <div
@@ -158,6 +155,7 @@ export function InstructorSite({
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
+            gap: 24,
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -165,22 +163,36 @@ export function InstructorSite({
               <img
                 src={instructor.profile_image_url}
                 alt={name}
-                style={{ width: 36, height: 36, borderRadius: "50%", objectFit: "cover" }}
+                style={{
+                  width: 38,
+                  height: 38,
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                  border: `2px solid ${T.iconBg}`,
+                }}
               />
             ) : null}
-            <span style={{ fontFamily: FONT_HEADING, fontSize: 17, fontWeight: 800, color: T.navy }}>
+            <span
+              style={{
+                fontFamily: FONT_HEADING,
+                fontSize: 18,
+                fontWeight: 800,
+                color: T.navy,
+                letterSpacing: "-0.01em",
+              }}
+            >
               {name}
             </span>
           </div>
-          <nav className="hidden lg:flex" style={{ gap: 32 }}>
+          <nav className="hidden lg:flex" style={{ gap: 34, alignItems: "center" }}>
             {NAV_LINKS.map((link) => (
               <button
                 key={link.id}
                 onClick={() => scrollToId(link.id)}
                 style={{
                   fontSize: 15,
-                  fontWeight: 600,
-                  color: T.muted,
+                  fontWeight: 700,
+                  color: T.navy,
                   background: "none",
                   border: "none",
                   cursor: "pointer",
@@ -190,150 +202,260 @@ export function InstructorSite({
               </button>
             ))}
           </nav>
-          <button
-            onClick={() => goEnquire()}
-            style={{
-              background: accent,
-              color: T.white,
-              borderRadius: 10,
-              padding: "11px 22px",
-              border: "none",
-              fontSize: 15,
-              fontWeight: 700,
-              cursor: "pointer",
-            }}
-          >
-            Book now
-          </button>
-        </div>
-      </header>
-
-      {/* 2. Hero */}
-      <section
-        style={{
-          position: "relative",
-          height: "100dvh",
-          minHeight: 540,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: "0 24px",
-          overflow: "hidden",
-          background: T.navy,
-        }}
-      >
-        {heroImage ? (
-          <div
-            aria-hidden="true"
-            style={{
-              position: "absolute",
-              inset: 0,
-              background: `url(${heroImage})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              backgroundRepeat: "no-repeat",
-            }}
-          />
-        ) : null}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            background:
-              "linear-gradient(to bottom, rgba(12,35,64,0.35) 0%, rgba(12,35,64,0.82) 100%)",
-          }}
-        />
-        <div style={{ position: "relative", textAlign: "center", maxWidth: 760 }}>
-          <p
-            style={{
-              fontSize: 13,
-              fontWeight: 700,
-              color: "rgba(255,255,255,0.72)",
-              letterSpacing: "0.15em",
-              textTransform: "uppercase",
-              marginBottom: 12,
-            }}
-          >
-            {name}
-          </p>
-          <h1
-            style={{
-              fontFamily: FONT_HEADING,
-              fontSize: "clamp(34px, 6vw, 64px)",
-              fontWeight: 800,
-              color: T.white,
-              lineHeight: 1.08,
-              marginBottom: 18,
-            }}
-          >
-            Driving lessons in {instructor.city || "your area"}
-          </h1>
-          {reviews.length > 0 ? (
-            <p
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 8,
-                color: "rgba(255,255,255,0.85)",
-                fontSize: 14,
-                marginBottom: 26,
-              }}
-            >
-              <Stars count={5} color="#F4B740" /> {avgRating} · {reviews.length} reviews
-            </p>
-          ) : null}
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "center" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <button
-              onClick={() => goEnquire()}
+              onClick={() => scrollToId("courses")}
+              className="hidden sm:block"
               style={{
                 background: accent,
                 color: T.white,
-                padding: "15px 32px",
-                borderRadius: 12,
-                fontSize: 16,
-                fontWeight: 700,
+                borderRadius: 10,
+                padding: "11px 22px",
                 border: "none",
+                fontSize: 15,
+                fontWeight: 700,
                 cursor: "pointer",
-                boxShadow: "0 10px 26px rgba(12,35,64,0.35)",
               }}
             >
-              Book a lesson
+              Find a course
             </button>
             <button
               onClick={() => goEnquire()}
               style={{
-                background: "rgba(255,255,255,0.14)",
-                backdropFilter: "blur(10px)",
-                color: T.white,
-                padding: "15px 32px",
-                borderRadius: 12,
-                fontSize: 16,
+                background: T.white,
+                color: accent,
+                borderRadius: 10,
+                padding: "10px 20px",
+                border: `1.5px solid ${accent}`,
+                fontSize: 15,
                 fontWeight: 700,
-                border: "1.5px solid rgba(255,255,255,0.45)",
                 cursor: "pointer",
               }}
             >
-              Get in touch
+              Book now
             </button>
           </div>
         </div>
-        <p
+      </header>
+
+      {/* 2. Hero — EveryDriver split layout: light surface, blobs, copy left, tilted cards right */}
+      <section
+        style={{
+          position: "relative",
+          padding: "72px 0 88px",
+          overflow: "hidden",
+          background: T.surface,
+        }}
+      >
+        {/* soft background blobs */}
+        <div
+          aria-hidden="true"
           style={{
             position: "absolute",
-            bottom: 32,
-            color: "rgba(255,255,255,0.5)",
-            fontSize: 12,
-            letterSpacing: "0.08em",
+            top: -120,
+            right: -80,
+            width: 620,
+            height: 620,
+            borderRadius: "50%",
+            background: alpha(accent, 0.07),
           }}
+        />
+        <div
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            bottom: -180,
+            left: -140,
+            width: 460,
+            height: 460,
+            borderRadius: "50%",
+            background: alpha(T.teal, 0.08),
+          }}
+        />
+
+        <div
+          className="grid lg:grid-cols-2"
+          style={{ ...wrap, position: "relative", gap: 48, alignItems: "center" }}
         >
-          Scroll to explore ↓
-        </p>
+          {/* left: copy */}
+          <div>
+            <Eyebrow accent={accent}>{name}</Eyebrow>
+            <h1
+              style={{
+                fontFamily: FONT_HEADING,
+                fontSize: "clamp(34px, 4.6vw, 58px)",
+                fontWeight: 800,
+                color: T.navy,
+                lineHeight: 1.06,
+                letterSpacing: "-0.02em",
+                marginBottom: 18,
+              }}
+            >
+              Driving lessons in{" "}
+              <span style={{ color: accent }}>{instructor.city || "your area"}</span>
+            </h1>
+            <p style={{ fontSize: 18, color: T.muted, lineHeight: 1.65, maxWidth: 480 }}>
+              DVSA-approved tuition, flexible hours and a pass-first-time plan built around you.
+            </p>
+
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 12, marginTop: 28 }}>
+              <button
+                onClick={() => goEnquire()}
+                style={{
+                  background: accent,
+                  color: T.white,
+                  padding: "15px 30px",
+                  borderRadius: 12,
+                  fontSize: 16,
+                  fontWeight: 700,
+                  border: "none",
+                  cursor: "pointer",
+                  boxShadow: `0 10px 24px ${alpha(accent, 0.28)}`,
+                }}
+              >
+                Book a lesson
+              </button>
+              <button
+                onClick={() => scrollToId("courses")}
+                style={{
+                  background: T.white,
+                  color: accent,
+                  padding: "15px 30px",
+                  borderRadius: 12,
+                  fontSize: 16,
+                  fontWeight: 700,
+                  border: `1.5px solid ${alpha(accent, 0.35)}`,
+                  cursor: "pointer",
+                }}
+              >
+                See courses →
+              </button>
+            </div>
+
+            {/* rating + trust row */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                flexWrap: "wrap",
+                gap: 12,
+                marginTop: 30,
+                fontSize: 14,
+                color: T.muted,
+                fontWeight: 600,
+              }}
+            >
+              {reviews.length > 0 ? (
+                <>
+                  <Stars count={5} color="#F4B740" />
+                  <strong style={{ color: T.navy }}>{avgRating} average</strong>
+                  <span>· Rated by {reviews.length}+ learners</span>
+                </>
+              ) : null}
+              {badges.length ? (
+                <>
+                  {reviews.length > 0 ? <span style={{ color: T.borderStrong }}>|</span> : null}
+                  {badges.map((badge) => (
+                    <span
+                      key={badge}
+                      style={{
+                        background: T.white,
+                        color: accent,
+                        border: `1px solid ${T.borderStrong}`,
+                        borderRadius: 8,
+                        padding: "5px 10px",
+                        fontSize: 12,
+                        fontWeight: 700,
+                      }}
+                    >
+                      {badge}
+                    </span>
+                  ))}
+                </>
+              ) : null}
+            </div>
+          </div>
+
+          {/* right: tilted image cards */}
+          <div style={{ position: "relative", minHeight: 420 }}>
+            <div
+              aria-hidden="true"
+              style={{
+                position: "absolute",
+                inset: "6% 4% 14% 12%",
+                borderRadius: 28,
+                background: alpha(T.teal, 0.35),
+                transform: "rotate(4deg)",
+              }}
+            />
+            {heroImage ? (
+              <img
+                src={heroImage}
+                alt={`Driving lessons with ${name}`}
+                style={{
+                  position: "absolute",
+                  inset: "0% 8% 18% 0%",
+                  width: "92%",
+                  height: "82%",
+                  objectFit: "cover",
+                  borderRadius: 22,
+                  transform: "rotate(-3deg)",
+                  border: `8px solid ${T.white}`,
+                  boxShadow: "0 26px 60px rgba(12,35,64,0.20)",
+                }}
+              />
+            ) : null}
+            {instructor.profile_image_url ? (
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  left: 12,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 12,
+                  background: T.white,
+                  borderRadius: 16,
+                  padding: "12px 18px 12px 12px",
+                  boxShadow: CARD_SHADOW_ED,
+                }}
+              >
+                <img
+                  src={instructor.profile_image_url}
+                  alt={name}
+                  style={{ width: 46, height: 46, borderRadius: "50%", objectFit: "cover" }}
+                />
+                <div>
+                  <p style={{ fontFamily: FONT_HEADING, fontWeight: 800, fontSize: 15 }}>{name}</p>
+                  <p
+                    style={{
+                      fontSize: 12,
+                      color: T.muted,
+                      fontWeight: 600,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 6,
+                    }}
+                  >
+                    <Stars count={5} color="#F4B740" />
+                    {avgRating || "5.0"} · {instructor.dbs_uploaded ? "DBS checked" : "DVSA approved"}
+                  </p>
+                </div>
+              </div>
+            ) : null}
+          </div>
+        </div>
       </section>
 
       {/* 3. Stats bar */}
       <section style={{ background: T.white, padding: "30px 0", borderBottom: `1px solid ${T.navBorder}` }}>
-        <div style={{ ...wrap, display: "grid", gridTemplateColumns: "repeat(4, 1fr)" }}>
+        <div
+          style={{
+            ...wrap,
+            display: "grid",
+            gridTemplateColumns: `repeat(${stats.length}, 1fr)`,
+          }}
+        >
           {stats.map((stat, index) => (
             <div
               key={stat.label}
