@@ -8,6 +8,7 @@ import {
   alpha,
   displayName,
   formatDate,
+  darken,
   scrollToId,
   type Course,
   type Instructor,
