@@ -58,6 +58,7 @@ async function loadSite(slug: string) {
 
 function InstructorPage() {
   const { slug } = Route.useParams();
+  console.log("[slug]", slug);
   const { data, isPending } = useQuery({
     queryKey: ["instructor-site", slug],
     queryFn: () => loadSite(slug),
