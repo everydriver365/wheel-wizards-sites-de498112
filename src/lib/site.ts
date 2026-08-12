@@ -10,6 +10,7 @@ export type Instructor = {
   profile_image_url?: string | null;
   website_hero_image_url?: string | null;
   website_bio?: string | null;
+  website_gallery_urls?: string | string[] | null;
   dvsa_grade?: string | null;
   dvsa_type?: string | null;
   dbs_uploaded?: boolean | null;

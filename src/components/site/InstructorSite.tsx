@@ -100,6 +100,18 @@ export function InstructorSite({
 
   const heroImage = instructor.website_hero_image_url || instructor.profile_image_url || "";
 
+  const gallery = useMemo<string[]>(() => {
+    const raw = instructor.website_gallery_urls;
+    if (!raw) return [];
+    if (Array.isArray(raw)) return raw.filter(Boolean).map(String);
+    try {
+      const parsed = JSON.parse(String(raw));
+      return Array.isArray(parsed) ? parsed.filter(Boolean).map(String) : [];
+    } catch {
+      return [];
+    }
+  }, [instructor.website_gallery_urls]);
+
   const stats = [
     { value: `${reviews.length}+`, label: "Happy pupils" },
     { value: instructor.dvsa_grade || "ADI", label: "DVSA grade" },
