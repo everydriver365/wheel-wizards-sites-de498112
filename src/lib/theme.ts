@@ -7,7 +7,7 @@ export const T = {
   primary: "#1A4A6E",
   teal: "#2D8A9E",
   surface: "#F3F8FF",
-  surfaceSoft: "#EAF3BB",
+  surfaceSoft: "#F6FAFD",
   iconBg: "#EAF3FB",
   border: "#E8EDF2",
   borderStrong: "#E0E9F3",
