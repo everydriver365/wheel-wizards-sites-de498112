@@ -636,7 +636,7 @@ export function InstructorSite({
                     car_type: (instructor["car_type"] as string | null) ?? null,
                   }}
                   onEnquire={() => goEnquire(course.name || course.course_type || "")}
-                  enquireHref={enquireHref(course.course_type || course.name || "")}
+                  enquireHref={`/${slug}/book?course=${course.id}`}
                 />
                 );
               })}
