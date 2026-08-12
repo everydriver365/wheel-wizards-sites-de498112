@@ -628,11 +628,12 @@ export function InstructorSite({
                       null,
                   }}
                   instructor={{
-                    name: instructor.name ?? null,
+                    name: instructor.name ?? "",
                     trading_name: instructor.trading_name ?? null,
                     brand_colour: instructor.brand_colour ?? null,
                     city: instructor.city ?? null,
-                    postcode: instructor.postcode ?? null,
+                    postcode: (instructor["home_postcode"] as string | null) ?? null,
+                    car_type: (instructor["car_type"] as string | null) ?? null,
                   }}
                   onEnquire={() => goEnquire(course.name || course.course_type || "")}
                   enquireHref={enquireHref(course.course_type || course.name || "")}
