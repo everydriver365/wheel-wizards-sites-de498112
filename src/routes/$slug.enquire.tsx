@@ -436,10 +436,20 @@ function Row({
         display: "flex",
         alignItems: "center",
         padding: "14px 16px",
+        gap: 12,
         borderBottom: last ? "none" : "1px solid #E4E8EF",
       }}
     >
-      <span style={{ fontSize: 13, fontWeight: 500, color: "#6B7686", width: 110, flexShrink: 0 }}>
+      <span
+        style={{
+          fontSize: 13,
+          fontWeight: 500,
+          color: "#6B7686",
+          width: 120,
+          flexShrink: 0,
+          fontFamily: FONT,
+        }}
+      >
         {label}
       </span>
       {children}
@@ -453,7 +463,7 @@ const inputStyle: React.CSSProperties = {
   outline: "none",
   fontSize: 15,
   color: "#0B1F3A",
-  textAlign: "right",
+  textAlign: "left",
   background: "transparent",
   fontFamily: FONT,
   minWidth: 0,
