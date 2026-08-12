@@ -23,31 +23,19 @@ export const Route = createFileRoute("/$slug")({
 });
 
 async function loadSite(slug: string) {
-  console.log("[fetch] slug:", slug);
-  console.log("[fetch] supabase url:", (supabase as unknown as { supabaseUrl: string }).supabaseUrl);
-
-  const { data: instructor, error, status } = await supabase
+  const { data: instructor, error } = await supabase
     .from("instructors_public")
     .select("*")
     .eq("app_slug", slug)
     .single();
 
-  console.log("[fetch] data:", instructor);
-  console.log("[fetch] error:", error);
-  console.log("[fetch] status:", status);
-
   if (error || !instructor) return { instructor: null, courses: [], reviews: [] };
 
-  console.log("[courses] instructor id:", instructor?.id);
-
-  const [
-    { data: courses, error: coursesError },
-    { data: reviews },
-  ] = await Promise.all([
+  const [{ data: courses }, { data: reviews }] = await Promise.all([
     supabase
       .from("instructor_courses")
       .select(
-        "id, course_type, name, total_hours, price, start_date, image_url, description, transmission, available_from",
+        "id, course_type, name, total_hours, price, start_date, image_url, description, available_from",
       )
       .eq("instructor_id", instructor.id)
       .is("deleted_at", null)
@@ -61,9 +49,6 @@ async function loadSite(slug: string) {
       .limit(6),
   ]);
 
-  console.log("[courses] data:", courses);
-  console.log("[courses] error:", coursesError);
-
   return {
     instructor: instructor as Instructor,
     courses: (courses as Course[] | null) ?? [],
@@ -73,7 +58,6 @@ async function loadSite(slug: string) {
 
 function InstructorPage() {
   const { slug } = Route.useParams();
-  console.log("[slug]", slug);
   const { data, isPending } = useQuery({
     queryKey: ["instructor-site", slug],
     queryFn: () => loadSite(slug),
