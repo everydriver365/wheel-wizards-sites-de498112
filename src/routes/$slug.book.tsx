@@ -91,6 +91,7 @@ function BookPage() {
         headers: {
           "Content-Type": "application/json",
           apikey: SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
         },
         body: JSON.stringify({
           instructor_id: instructor.id,
