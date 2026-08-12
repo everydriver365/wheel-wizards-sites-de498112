@@ -173,31 +173,41 @@ export function InstructorSite({
             gap: 24,
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            {instructor.profile_image_url ? (
+          {/* Left side of sticky nav */}
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            {instructor["logo_url"] ? (
               <img
-                src={instructor.profile_image_url}
-                alt={name}
-                style={{
-                  width: 38,
-                  height: 38,
-                  borderRadius: "50%",
-                  objectFit: "cover",
-                  border: `2px solid ${T.iconBg}`,
-                }}
+                src={String(instructor["logo_url"])}
+                alt={instructor.trading_name ?? instructor.name ?? ""}
+                style={{ height: 32, maxWidth: 120, objectFit: "contain" }}
               />
-            ) : null}
-            <span
-              style={{
-                fontFamily: FONT_HEADING,
-                fontSize: 18,
-                fontWeight: 800,
-                color: T.navy,
-                letterSpacing: "-0.01em",
-              }}
-            >
-              {name}
-            </span>
+            ) : (
+              <>
+                {instructor.profile_image_url ? (
+                  <img
+                    src={instructor.profile_image_url}
+                    alt={name}
+                    style={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: "50%",
+                      objectFit: "cover",
+                      border: `2px solid ${accent}`,
+                    }}
+                  />
+                ) : null}
+                <span
+                  style={{
+                    fontSize: 15,
+                    fontWeight: 700,
+                    color: T.navy,
+                    fontFamily: FONT_HEADING,
+                  }}
+                >
+                  {instructor.trading_name ?? instructor.name ?? name}
+                </span>
+              </>
+            )}
           </div>
           <nav className="hidden lg:flex" style={{ gap: 34, alignItems: "center" }}>
             {NAV_LINKS.map((link) => (
