@@ -47,9 +47,9 @@ function SearchPage() {
     <main
       style={{
         minHeight: "100dvh",
-        background: "#F8F9FB",
-        fontFamily: "Poppins, system-ui, sans-serif",
-        color: "#0B1F3A",
+        background: "#F3F8FF",
+        fontFamily: "'Manrope', system-ui, sans-serif",
+        color: "#0C2340",
         padding: "80px 24px",
       }}
     >
@@ -65,10 +65,10 @@ function SearchPage() {
         >
           DSM Sites
         </p>
-        <h1 style={{ fontSize: "clamp(28px, 5vw, 44px)", fontWeight: 800, letterSpacing: "-0.02em", marginTop: 8 }}>
+        <h1 style={{ fontFamily: "'Sora', sans-serif", fontSize: "clamp(30px, 5vw, 46px)", fontWeight: 800, letterSpacing: "-0.02em", marginTop: 8 }}>
           Find your instructor
         </h1>
-        <p style={{ fontSize: 15, color: "#6B7686", marginTop: 10 }}>
+        <p style={{ fontSize: 15, color: "#5A6B82", marginTop: 10 }}>
           Enter your postcode or town to see driving instructors near you.
         </p>
 
@@ -84,10 +84,10 @@ function SearchPage() {
               fontSize: 15,
               fontFamily: "inherit",
               background: "#fff",
-              border: "1px solid #E4E8EF",
-              borderRadius: 16,
+              border: "1px solid #E8EDF2",
+              borderRadius: 12,
               outline: "none",
-              color: "#0B1F3A",
+              color: "#0C2340",
             }}
           />
           <button
@@ -96,7 +96,7 @@ function SearchPage() {
               background: DEFAULT_ACCENT,
               color: "#fff",
               border: "none",
-              borderRadius: 50,
+              borderRadius: 12,
               padding: "0 26px",
               fontSize: 15,
               fontWeight: 700,
@@ -108,9 +108,9 @@ function SearchPage() {
         </form>
 
         <div style={{ marginTop: 28, display: "grid", gap: 12, textAlign: "left" }}>
-          {loading ? <p style={{ fontSize: 14, color: "#6B7686" }}>Searching…</p> : null}
+          {loading ? <p style={{ fontSize: 14, color: "#5A6B82" }}>Searching…</p> : null}
           {!loading && results?.length === 0 ? (
-            <p style={{ fontSize: 14, color: "#6B7686" }}>No instructors found for “{query}”. Try a nearby town.</p>
+            <p style={{ fontSize: 14, color: "#5A6B82" }}>No instructors found for “{query}”. Try a nearby town.</p>
           ) : null}
           {results?.map((instructor) => (
             <Link
@@ -122,11 +122,11 @@ function SearchPage() {
                 alignItems: "center",
                 gap: 14,
                 background: "#fff",
-                borderRadius: 20,
+                borderRadius: 16,
                 padding: 16,
                 boxShadow: CARD_SHADOW,
                 textDecoration: "none",
-                color: "#0B1F3A",
+                color: "#0C2340",
               }}
             >
               {instructor.profile_image_url ? (
@@ -138,7 +138,7 @@ function SearchPage() {
               ) : null}
               <span>
                 <span style={{ display: "block", fontSize: 15, fontWeight: 700 }}>{displayName(instructor)}</span>
-                <span style={{ display: "block", fontSize: 12, color: "#6B7686" }}>
+                <span style={{ display: "block", fontSize: 12, color: "#5A6B82" }}>
                   {[instructor.city, instructor.postcode].filter(Boolean).join(" · ")}
                 </span>
               </span>
