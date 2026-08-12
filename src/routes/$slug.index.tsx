@@ -5,7 +5,7 @@ import { InstructorSite } from "@/components/site/InstructorSite";
 import { supabase } from "@/lib/supabase";
 import type { Course, Instructor, Review } from "@/lib/site";
 
-export const Route = createFileRoute("/$slug")({
+export const Route = createFileRoute("/$slug/")({
   head: ({ params }) => {
     const title = `Driving lessons with ${params.slug.replace(/-/g, " ")} — DSM Sites`;
     const description =
