@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Clock, CalendarDays, Car, Star } from "lucide-react";
+import { Clock, CalendarDays, Car, Star, Check, Quote } from "lucide-react";
 
 import { EnquiryForm } from "./EnquiryForm";
 import {
@@ -22,6 +22,12 @@ const NAV_LINKS = [
 ];
 
 const wrap: React.CSSProperties = { maxWidth: 1200, margin: "0 auto", padding: "0 24px" };
+
+const sectionHead: React.CSSProperties = { textAlign: "center", maxWidth: 660, margin: "0 auto 44px" };
+
+function SectionLead({ children }: { children: React.ReactNode }) {
+  return <p style={{ fontSize: 17, color: T.muted, lineHeight: 1.65 }}>{children}</p>;
+}
 
 function Stars({ count = 5, color }: { count?: number; color: string }) {
   return (
