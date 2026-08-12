@@ -97,7 +97,7 @@ function CoursesPage() {
                     city: instructor?.city ?? null,
                     postcode: instructor?.postcode ?? null,
                   }}
-                  enquireHref={enquireHref(course.course_type || course.name || "")}
+                  enquireHref={`/${slug}/book?course=${course.id}`}
                 />
               ))}
             </div>

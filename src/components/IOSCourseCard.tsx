@@ -246,6 +246,30 @@ export default function IOSCourseCard({ course, instructor, onEnquire, enquireHr
               From £{course.price}
             </span>
           ) : null}
+
+          {enquireHref ? (
+            <span
+              style={{
+                display: "block",
+                width: "100%",
+                marginTop: 14,
+                background: brand,
+                color: "#fff",
+                border: "none",
+                borderRadius: 50,
+                padding: "11px 0",
+                fontSize: 13,
+                fontWeight: 700,
+                cursor: "pointer",
+                fontFamily: FONT,
+                textAlign: "center",
+                textDecoration: "none",
+                boxShadow: `0 3px 0 ${darken(brand, 0.25)}`,
+              }}
+            >
+              Book now
+            </span>
+          ) : null}
         </div>
       </div>
     </a>
