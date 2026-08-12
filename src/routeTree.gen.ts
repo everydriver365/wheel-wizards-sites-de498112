@@ -11,7 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SlugIndexRouteImport } from './routes/$slug.index'
+import { Route as SlugCoursesRouteImport } from './routes/$slug.courses'
 import { Route as SlugEnquireRouteImport } from './routes/$slug.enquire'
+import { Route as SlugReviewsRouteImport } from './routes/$slug.reviews'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -23,39 +25,64 @@ const SlugIndexRoute = SlugIndexRouteImport.update({
   path: '/$slug/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SlugCoursesRoute = SlugCoursesRouteImport.update({
+  id: '/$slug/courses',
+  path: '/$slug/courses',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SlugEnquireRoute = SlugEnquireRouteImport.update({
   id: '/$slug/enquire',
   path: '/$slug/enquire',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SlugReviewsRoute = SlugReviewsRouteImport.update({
+  id: '/$slug/reviews',
+  path: '/$slug/reviews',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/$slug/courses': typeof SlugCoursesRoute
   '/$slug/enquire': typeof SlugEnquireRoute
+  '/$slug/reviews': typeof SlugReviewsRoute
   '/$slug/': typeof SlugIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/$slug/courses': typeof SlugCoursesRoute
   '/$slug/enquire': typeof SlugEnquireRoute
+  '/$slug/reviews': typeof SlugReviewsRoute
   '/$slug': typeof SlugIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/$slug/courses': typeof SlugCoursesRoute
   '/$slug/enquire': typeof SlugEnquireRoute
+  '/$slug/reviews': typeof SlugReviewsRoute
   '/$slug/': typeof SlugIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/$slug/enquire' | '/$slug/'
+  fullPaths:
+    '/' | '/$slug/courses' | '/$slug/enquire' | '/$slug/reviews' | '/$slug/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/$slug/enquire' | '/$slug'
-  id: '__root__' | '/' | '/$slug/enquire' | '/$slug/'
+  to: '/' | '/$slug/courses' | '/$slug/enquire' | '/$slug/reviews' | '/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/$slug/courses'
+    | '/$slug/enquire'
+    | '/$slug/reviews'
+    | '/$slug/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SlugCoursesRoute: typeof SlugCoursesRoute
   SlugEnquireRoute: typeof SlugEnquireRoute
+  SlugReviewsRoute: typeof SlugReviewsRoute
   SlugIndexRoute: typeof SlugIndexRoute
 }
 
@@ -75,6 +102,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SlugIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/$slug/courses': {
+      id: '/$slug/courses'
+      path: '/$slug/courses'
+      fullPath: '/$slug/courses'
+      preLoaderRoute: typeof SlugCoursesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/$slug/enquire': {
       id: '/$slug/enquire'
       path: '/$slug/enquire'
@@ -82,12 +116,21 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SlugEnquireRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/$slug/reviews': {
+      id: '/$slug/reviews'
+      path: '/$slug/reviews'
+      fullPath: '/$slug/reviews'
+      preLoaderRoute: typeof SlugReviewsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SlugCoursesRoute: SlugCoursesRoute,
   SlugEnquireRoute: SlugEnquireRoute,
+  SlugReviewsRoute: SlugReviewsRoute,
   SlugIndexRoute: SlugIndexRoute,
 }
 export const routeTree = rootRouteImport
