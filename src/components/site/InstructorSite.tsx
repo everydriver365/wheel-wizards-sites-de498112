@@ -143,7 +143,7 @@ export function InstructorSite({
     navigate({
       to: "/$slug/enquire",
       params: { slug },
-      search: interest ? { course: interest } : {},
+      search: { course: interest || undefined },
     });
   };
 
@@ -713,31 +713,66 @@ export function InstructorSite({
         </section>
       ) : null}
 
-      {/* 7. Enquiry */}
-      <section id="enquiry" style={{ background: T.white, padding: "88px 0", scrollMarginTop: 80 }}>
-        <div style={{ maxWidth: 600, margin: "0 auto", padding: "0 24px", textAlign: "center" }}>
-          <Eyebrow accent={accent}>Get in touch</Eyebrow>
-          <h2
-            style={{
-              fontFamily: FONT_HEADING,
-              fontSize: "clamp(24px, 3vw, 32px)",
-              fontWeight: 700,
-              color: T.navy,
-              marginBottom: 10,
-            }}
-          >
-            Send {name} a message
-          </h2>
-          <p style={{ fontSize: 16, color: T.muted, marginBottom: 30 }}>
-            They'll be in touch within 24 hours.
-          </p>
-          <EnquiryForm
-            instructor={instructor}
-            accent={accent}
-            courseInterest={courseInterest}
-            onCourseInterestChange={setCourseInterest}
-          />
+      {/* 7. Enquiry CTA */}
+      <section
+        id="enquiry"
+        style={{ textAlign: "center", padding: "80px 24px", background: "#F8F9FB", scrollMarginTop: 80 }}
+      >
+        <div
+          style={{
+            fontSize: 11,
+            fontWeight: 700,
+            color: accent,
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            marginBottom: 8,
+          }}
+        >
+          Get in touch
         </div>
+        <h2
+          style={{
+            fontSize: 32,
+            fontWeight: 800,
+            color: "#0B1F3A",
+            letterSpacing: "-0.02em",
+            marginBottom: 12,
+          }}
+        >
+          Ready to get started?
+        </h2>
+        <p
+          style={{
+            fontSize: 16,
+            color: "#6B7686",
+            maxWidth: 400,
+            margin: "0 auto 32px",
+            lineHeight: 1.6,
+          }}
+        >
+          Send {name} a message and they'll be in touch soon.
+        </p>
+        <a
+          href={enquireHref()}
+          onClick={(event) => {
+            event.preventDefault();
+            goEnquire();
+          }}
+          style={{
+            display: "inline-block",
+            background: accent,
+            color: "#fff",
+            padding: "16px 40px",
+            borderRadius: 50,
+            fontSize: 16,
+            fontWeight: 700,
+            textDecoration: "none",
+            boxShadow: `0 4px 0 ${darken(accent, 0.28)}`,
+            fontFamily: "'Poppins', sans-serif",
+          }}
+        >
+          Send an enquiry →
+        </a>
       </section>
 
       {/* 8. Footer */}
