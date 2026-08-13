@@ -14,6 +14,8 @@ interface IOSCourseCardProps {
     start_date?: string | null;
     available_from?: string | null;
     image_url?: string | null;
+    early_bird_discount?: number | null;
+    early_bird_expiry?: string | null;
   };
   instructor: {
     name?: string | null;
