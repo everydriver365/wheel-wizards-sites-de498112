@@ -144,6 +144,7 @@ export default function IOSCourseCard({ course, instructor, onEnquire, enquireHr
     ? transmissionLabel(instructor.car_type)
     : transmissionLabel(`${course.course_type ?? ""} ${course.name ?? ""}`);
   const showYear = date != null && date.year !== new Date().getFullYear();
+  const deal = earlyBird(course);
 
   return (
     <a
