@@ -185,7 +185,16 @@ function BookPage() {
   return (
     <div style={{ background: "#F8F9FB", minHeight: "100vh", fontFamily: FONT }}>
       <header
-        style={{ background: accent, padding: "16px 24px", display: "flex", alignItems: "center", gap: 12 }}
+        style={{
+          background: accent,
+          padding: "16px 24px",
+          display: "flex",
+          alignItems: "center",
+          gap: 12,
+          position: "sticky",
+          top: 0,
+          zIndex: 100,
+        }}
       >
         <button
           onClick={() =>
@@ -218,11 +227,16 @@ function BookPage() {
             alt={name}
             style={{ height: 32, maxWidth: 140, objectFit: "contain" }}
           />
-        ) : (
-          <span style={{ color: "#fff", fontSize: 15, fontWeight: 700 }}>
-            {loading ? "Loading…" : name}
-          </span>
-        )}
+        ) : instructor?.profile_image_url ? (
+          <img
+            src={instructor.profile_image_url}
+            alt={name}
+            style={{ width: 32, height: 32, borderRadius: "50%", objectFit: "cover" }}
+          />
+        ) : null}
+        <span style={{ color: "#fff", fontSize: 15, fontWeight: 700, fontFamily: FONT }}>
+          {loading ? "Loading…" : name}
+        </span>
         <span style={{ color: "rgba(255,255,255,0.75)", fontSize: 13, marginLeft: "auto" }}>
           {course?.name ?? ""}
         </span>
