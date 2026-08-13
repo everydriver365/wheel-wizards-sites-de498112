@@ -173,6 +173,26 @@ export default function IOSCourseCard({ course, instructor, onEnquire, enquireHr
     >
       {/* Image with pill badges */}
       <div style={{ position: "relative" }}>
+        {deal ? (
+          <span
+            style={{
+              position: "absolute",
+              top: 16,
+              right: -32,
+              background: "#1877D6",
+              color: "#fff",
+              fontSize: 11,
+              fontWeight: 900,
+              letterSpacing: "0.4px",
+              padding: "5px 38px",
+              transform: "rotate(38deg)",
+              boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+              zIndex: 2,
+            }}
+          >
+            SAVE £{deal.amount}
+          </span>
+        ) : null}
         {course.image_url ? (
           <img
             src={course.image_url}
