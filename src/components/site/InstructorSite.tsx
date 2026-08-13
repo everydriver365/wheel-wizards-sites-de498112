@@ -423,6 +423,35 @@ export function InstructorSite({
                 </>
               ) : null}
             </div>
+
+            {nextAvailable ? (
+              <div
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 8,
+                  marginTop: 16,
+                  background: T.white,
+                  border: `1px solid ${T.borderStrong}`,
+                  borderRadius: 50,
+                  padding: "8px 14px",
+                  boxShadow: CARD_SHADOW_SOFT,
+                }}
+              >
+                <span
+                  aria-hidden="true"
+                  style={{ width: 8, height: 8, borderRadius: "50%", background: "#22B07D" }}
+                />
+                <span style={{ fontSize: 13, fontWeight: 700, color: T.navy }}>
+                  Next available:{" "}
+                  {new Date(nextAvailable).toLocaleDateString("en-GB", {
+                    weekday: "short",
+                    day: "numeric",
+                    month: "short",
+                  })}
+                </span>
+              </div>
+            ) : null}
           </div>
 
           {/* right: tilted image cards */}
