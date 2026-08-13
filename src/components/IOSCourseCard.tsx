@@ -1,8 +1,7 @@
-import { DEFAULT_ACCENT, darken } from "@/lib/site";
+import { darken } from "@/lib/site";
 
 const FONT = "'Poppins', 'Manrope', system-ui, sans-serif";
 const NAVY = "#0F2044";
-const DEEP_BLUE = DEFAULT_ACCENT; // #1A4A6E — EveryDriver deep blue
 const TEAL = "#1877D6";
 
 interface IOSCourseCardProps {
