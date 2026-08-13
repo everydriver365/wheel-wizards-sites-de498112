@@ -549,7 +549,15 @@ function BookPage() {
               opacity: submitting || loading || (step === 3 && !termsChecked) ? 0.6 : 1,
             }}
           >
-            {step === 3 ? (submitting ? "Creating payment…" : `Pay £${price}`) : "Continue →"}
+            {step === 3
+              ? isFree
+                ? submitting
+                  ? "Confirming…"
+                  : "Confirm booking"
+                : submitting
+                  ? "Creating payment…"
+                  : `Pay £${price}`
+              : "Continue →"}
           </button>
         </div>
       </div>
