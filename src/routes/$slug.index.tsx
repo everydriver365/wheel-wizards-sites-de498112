@@ -23,6 +23,7 @@ export const Route = createFileRoute("/$slug/")({
 });
 
 async function loadSite(slug: string) {
+  const today = new Date().toISOString().split("T")[0];
   const { data: instructor, error } = await supabase
     .from("instructors_public")
     .select("*")
@@ -39,6 +40,9 @@ async function loadSite(slug: string) {
       )
       .eq("instructor_id", instructor.id)
       .is("deleted_at", null)
+      .or(
+        `available_from.gte.${today},start_date.gte.${today},available_from.is.null,start_date.is.null`,
+      )
       .order("image_url", { ascending: false, nullsFirst: false })
       .order("created_at", { ascending: false })
       .limit(6),
