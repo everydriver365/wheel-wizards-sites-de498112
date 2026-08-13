@@ -340,16 +340,42 @@ export default function IOSCourseCard({ course, instructor, onEnquire, enquireHr
                 >
                   FROM
                 </span>
-                <span
-                  style={{
-                    color: NAVY,
-                    fontSize: 27,
-                    fontWeight: 900,
-                    letterSpacing: "-0.5px",
-                  }}
-                >
-                  £{course.price}
+                <span style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
+                  {deal ? (
+                    <span
+                      style={{
+                        color: "#B0B0B5",
+                        fontSize: 15,
+                        fontWeight: 700,
+                        textDecoration: "line-through",
+                      }}
+                    >
+                      £{deal.original}
+                    </span>
+                  ) : null}
+                  <span
+                    style={{
+                      color: deal ? "#1A9B5C" : "#0B1F3A",
+                      fontSize: 27,
+                      fontWeight: 900,
+                      letterSpacing: "-0.5px",
+                    }}
+                  >
+                    £{deal ? deal.discounted : course.price}
+                  </span>
                 </span>
+                {deal?.deadline ? (
+                  <span
+                    style={{
+                      marginTop: 2,
+                      color: "#1877D6",
+                      fontSize: 10.5,
+                      fontWeight: 700,
+                    }}
+                  >
+                    Book by {deal.deadline}
+                  </span>
+                ) : null}
               </span>
             ) : (
               <span />
