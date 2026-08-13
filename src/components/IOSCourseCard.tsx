@@ -64,6 +64,25 @@ function isFuture(value?: string | null) {
   return d > new Date();
 }
 
+/** Active early-bird discount, derived from the real course fields. */
+function earlyBird(course: { price?: number | null; early_bird_discount?: number | null; early_bird_expiry?: string | null }) {
+  const amount = Number(course.early_bird_discount ?? 0);
+  if (!amount || amount <= 0) return null;
+  const expiry = course.early_bird_expiry ? new Date(course.early_bird_expiry) : null;
+  if (expiry && !Number.isNaN(expiry.getTime()) && expiry < new Date()) return null;
+  const price = course.price != null ? Number(course.price) : null;
+  if (price == null) return null;
+  return {
+    amount,
+    original: price,
+    discounted: Math.max(price - amount, 0),
+    deadline:
+      expiry && !Number.isNaN(expiry.getTime())
+        ? expiry.toLocaleDateString("en-GB", { day: "numeric", month: "short" })
+        : null,
+  };
+}
+
 function ClockIcon() {
   return (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={TEAL} strokeWidth="2" strokeLinecap="round" aria-hidden="true">
