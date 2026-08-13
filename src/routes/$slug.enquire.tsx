@@ -121,6 +121,9 @@ function EnquirePage() {
           display: "flex",
           alignItems: "center",
           gap: 12,
+          position: "sticky",
+          top: 0,
+          zIndex: 100,
         }}
       >
         <button
@@ -144,14 +147,20 @@ function EnquirePage() {
         >
           ←
         </button>
-        {instructor?.profile_image_url ? (
+        {instructor?.["logo_url"] ? (
+          <img
+            src={String(instructor["logo_url"])}
+            alt={name}
+            style={{ height: 32, maxWidth: 140, objectFit: "contain" }}
+          />
+        ) : instructor?.profile_image_url ? (
           <img
             src={instructor.profile_image_url}
             alt={name}
-            style={{ width: 32, height: 32, borderRadius: 999, objectFit: "cover" }}
+            style={{ width: 32, height: 32, borderRadius: "50%", objectFit: "cover" }}
           />
         ) : null}
-        <span style={{ color: "#fff", fontSize: 15, fontWeight: 700 }}>
+        <span style={{ color: "#fff", fontSize: 15, fontWeight: 700, fontFamily: FONT }}>
           {loading ? "Loading…" : name}
         </span>
       </header>
