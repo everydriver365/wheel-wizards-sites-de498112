@@ -622,7 +622,7 @@ export function InstructorSite({
                     brand_colour: instructor.brand_colour ?? null,
                     city: instructor.city ?? null,
                     postcode: (instructor["home_postcode"] as string | null) ?? null,
-                    car_type: instructor.car_type ?? null,
+                    car_type: (instructor["car_type"] as string | null) ?? null,
                   }}
                   onEnquire={() => goEnquire(course.name || course.course_type || "")}
                   enquireHref={`/${slug}/book?course=${course.id}`}
