@@ -1,22 +1,17 @@
-# Course card date rail: why those two cards look wrong
+# Course card dates: hide undated courses, show the year
 
 ## What the data actually says
 
-Both cards are showing the truth — the rail just hides it.
+- **"10 Hour Intensive" – 14 JUL**: its `start_date` is **2028-07-14**. Genuinely future, so the filter kept it correctly — but the rail prints only day + month, so it reads like a past July.
+- **"101101"**: both `start_date` and `available_from` are **null**, so there is no date to render and the rail is blank.
 
-- **"10 Hour Intensive" – 14 JUL**: its `start_date` is **2028-07-14**. That is in the future, so the filter correctly kept it. The rail prints only day + month, so a 2028 date reads as "last July".
-- **"101101"**: both `start_date` and `available_from` are **null** in the database. There is no date to show, so the rail renders empty.
+## Proposed changes
 
-So nothing is broken in the query — the rail is just ambiguous for far-future dates and blank for undated courses.
-
-## Proposed fix (presentation only)
-
-1. **Show the year when it isn't the current year.** The rail becomes day / month / year (e.g. `14 JUL 2028`), so a 2028 course can't be mistaken for a past one. Dates in the current year stay as day + month.
-2. **Give undated courses a rail too.** Instead of a blank strip, show a short label such as "FLEXIBLE START" so the card looks complete and tells the pupil dates are arranged on booking.
+1. **Don't show courses with no start date.** Drop the "date is null" allowance from the course queries so only courses with a real, future `start_date`/`available_from` appear. "101101" disappears from the site.
+2. **Show the year when it isn't the current year.** The rail becomes `14 JUL 2028`, so a far-future course can't be mistaken for a past one.
 
 ## Technical notes
 
-- Single file: `src/components/IOSCourseCard.tsx`.
-- Extend `splitDate` to also return the year; render it as a small line under the month when `year !== currentYear`.
-- When `dateValue` is null, render the navy rail with the stacked "FLEXIBLE / START" text rather than skipping it.
-- No query, schema, or data changes.
+- Queries: `src/routes/$slug.index.tsx` and `src/routes/$slug.courses.tsx` — require a future date instead of allowing nulls (`available_from.gte.today` OR `start_date.gte.today`, with no `is.null` branch).
+- Card: `src/components/IOSCourseCard.tsx` — extend `splitDate` to return the year and render a small year line under the month when it differs from the current year.
+- No schema or data changes.
