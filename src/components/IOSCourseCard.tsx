@@ -3,7 +3,7 @@ import { DEFAULT_ACCENT, darken } from "@/lib/site";
 const FONT = "'Poppins', 'Manrope', system-ui, sans-serif";
 const NAVY = "#0F2044";
 const DEEP_BLUE = DEFAULT_ACCENT; // #1A4A6E — EveryDriver deep blue
-const TEAL = "#2D8A9E";
+const TEAL = "#1877D6";
 
 interface IOSCourseCardProps {
   course: {
@@ -65,7 +65,7 @@ function isFuture(value?: string | null) {
 
 function ClockIcon() {
   return (
-    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke={TEAL} strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={TEAL} strokeWidth="2" strokeLinecap="round" aria-hidden="true">
       <circle cx="12" cy="12" r="9" />
       <path d="M12 7.5V12l3 1.8" />
     </svg>
@@ -74,7 +74,7 @@ function ClockIcon() {
 
 function PinIcon() {
   return (
-    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke={TEAL} strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={TEAL} strokeWidth="2" strokeLinecap="round" aria-hidden="true">
       <path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z" />
       <circle cx="12" cy="10" r="2.5" />
     </svg>
@@ -83,7 +83,7 @@ function PinIcon() {
 
 function PersonIcon() {
   return (
-    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke={TEAL} strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={TEAL} strokeWidth="2" strokeLinecap="round" aria-hidden="true">
       <circle cx="12" cy="8" r="3.5" />
       <path d="M5 20c0-3.6 3.1-5.5 7-5.5s7 1.9 7 5.5" />
     </svg>
@@ -92,7 +92,7 @@ function PersonIcon() {
 
 function BoltIcon() {
   return (
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
       <path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z" />
     </svg>
   );
@@ -100,7 +100,7 @@ function BoltIcon() {
 
 function GearIcon() {
   return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
       <circle cx="7" cy="7" r="2.5" />
       <path d="M9.5 7H17a2 2 0 0 1 0 4h-6" />
       <circle cx="17" cy="17" r="2" />
@@ -109,7 +109,7 @@ function GearIcon() {
 }
 
 export default function IOSCourseCard({ course, instructor, onEnquire, enquireHref }: IOSCourseCardProps) {
-  const brand = DEEP_BLUE;
+  const brand = NAVY;
   const title = course.name || `${course.total_hours ?? ""} hour driving lessons`.trim();
   const dateValue = isFuture(course.available_from)
     ? course.available_from
@@ -144,7 +144,7 @@ export default function IOSCourseCard({ course, instructor, onEnquire, enquireHr
         background: "#fff",
         borderRadius: 22,
         overflow: "hidden",
-        boxShadow: "0 4px 0 #E4E4E8, 0 10px 26px rgba(11,31,58,0.08)",
+        boxShadow: "0 8px 0 #E4E4E8, 0 20px 40px rgba(0,0,0,0.12)",
         transition: "transform 160ms ease",
         fontFamily: FONT,
         height: "100%",
@@ -168,16 +168,25 @@ export default function IOSCourseCard({ course, instructor, onEnquire, enquireHr
           />
         )}
 
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background: "linear-gradient(180deg, rgba(11,31,58,0.25) 0%, transparent 35%)",
+            pointerEvents: "none",
+          }}
+        />
+
         <div style={{ position: "absolute", top: 14, left: 14, display: "flex", gap: 8 }}>
           <span
             style={{
               display: "inline-flex",
               alignItems: "center",
               gap: 6,
-              background: brand,
+              background: NAVY,
               color: "#fff",
-              fontSize: 13,
-              fontWeight: 600,
+              fontSize: 12,
+              fontWeight: 800,
               borderRadius: 999,
               padding: "7px 14px",
               boxShadow: "0 2px 8px rgba(11,31,58,0.25)",
@@ -193,8 +202,8 @@ export default function IOSCourseCard({ course, instructor, onEnquire, enquireHr
               gap: 6,
               background: "#fff",
               color: NAVY,
-              fontSize: 13,
-              fontWeight: 600,
+              fontSize: 12,
+              fontWeight: 800,
               borderRadius: 999,
               padding: "7px 14px",
               boxShadow: "0 2px 8px rgba(11,31,58,0.18)",
@@ -211,34 +220,44 @@ export default function IOSCourseCard({ course, instructor, onEnquire, enquireHr
         {date ? (
           <div
             style={{
-              background: brand,
+              background: NAVY,
               color: "#fff",
-              width: 96,
+              width: 88,
               flexShrink: 0,
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
-              padding: "26px 0",
+              padding: "20px 0",
             }}
           >
-            <span style={{ fontSize: 34, fontWeight: 800, lineHeight: 1 }}>{date.day}</span>
-            <span style={{ fontSize: 12, fontWeight: 600, letterSpacing: "0.08em", marginTop: 6 }}>
+            <span style={{ fontSize: 34, fontWeight: 900, lineHeight: 1, letterSpacing: "-1px" }}>
+              {date.day}
+            </span>
+            <span
+              style={{
+                fontSize: 11,
+                fontWeight: 800,
+                letterSpacing: "1px",
+                marginTop: 4,
+                color: "rgba(255,255,255,0.7)",
+              }}
+            >
               {date.month}
             </span>
             {showYear ? (
-              <span style={{ fontSize: 11, fontWeight: 600, opacity: 0.8, marginTop: 4 }}>
+              <span style={{ fontSize: 10, fontWeight: 600, color: "rgba(255,255,255,0.5)" }}>
                 {date.year}
               </span>
             ) : null}
           </div>
         ) : null}
 
-        <div style={{ padding: "22px 24px", display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
-          <h3 style={{ fontSize: 20, fontWeight: 700, color: NAVY, lineHeight: 1.25 }}>{title}</h3>
+        <div style={{ padding: "20px 18px", display: "flex", flexDirection: "column", flex: 1 }}>
+          <h3 style={{ fontSize: 20, fontWeight: 800, color: NAVY, lineHeight: 1.25 }}>{title}</h3>
 
           {course.total_hours != null ? (
-            <span style={row}>
+            <span style={{ ...row, marginTop: 10 }}>
               <ClockIcon />
               <span style={{ color: "#6B7686" }}>
                 {course.total_hours} hours{date ? ` (${date.short})` : ""}
@@ -247,48 +266,74 @@ export default function IOSCourseCard({ course, instructor, onEnquire, enquireHr
           ) : null}
 
           {location ? (
-            <span style={row}>
+            <span style={{ ...row, marginTop: 10 }}>
               <PinIcon />
               <span style={{ color: NAVY, fontWeight: 600 }}>{location}</span>
             </span>
           ) : null}
 
-          <span style={row}>
+          <span style={{ ...row, marginTop: 10 }}>
             <PersonIcon />
             <span style={{ color: "#6B7686" }}>
               With <strong style={{ color: NAVY, fontWeight: 700 }}>{withName}</strong>
             </span>
           </span>
 
-          {course.price != null ? (
-            <span style={{ fontSize: 26, fontWeight: 800, color: NAVY, marginTop: 6 }}>
-              From £{course.price}
-            </span>
-          ) : null}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginTop: 16,
+            }}
+          >
+            {course.price != null ? (
+              <span style={{ display: "flex", flexDirection: "column" }}>
+                <span
+                  style={{
+                    color: "#8A8A8E",
+                    fontSize: 10.5,
+                    fontWeight: 700,
+                    letterSpacing: "0.3px",
+                  }}
+                >
+                  FROM
+                </span>
+                <span
+                  style={{
+                    color: NAVY,
+                    fontSize: 27,
+                    fontWeight: 900,
+                    letterSpacing: "-0.5px",
+                  }}
+                >
+                  £{course.price}
+                </span>
+              </span>
+            ) : (
+              <span />
+            )}
 
-          {enquireHref ? (
-            <span
-              style={{
-                display: "block",
-                width: "100%",
-                marginTop: 14,
-                background: brand,
-                color: "#fff",
-                border: "none",
-                borderRadius: 50,
-                padding: "11px 0",
-                fontSize: 13,
-                fontWeight: 700,
-                cursor: "pointer",
-                fontFamily: FONT,
-                textAlign: "center",
-                textDecoration: "none",
-                boxShadow: `0 3px 0 ${darken(brand, 0.25)}`,
-              }}
-            >
-              Book now
-            </span>
-          ) : null}
+            {enquireHref ? (
+              <span
+                style={{
+                  background: NAVY,
+                  color: "#fff",
+                  fontSize: 13.5,
+                  fontWeight: 800,
+                  padding: "11px 22px",
+                  borderRadius: 12,
+                  boxShadow: "0 3px 0 #050D1C",
+                  flexShrink: 0,
+                  cursor: "pointer",
+                  fontFamily: FONT,
+                  textDecoration: "none",
+                }}
+              >
+                Book now
+              </span>
+            ) : null}
+          </div>
         </div>
       </div>
     </a>
@@ -299,5 +344,5 @@ const row: React.CSSProperties = {
   display: "flex",
   alignItems: "center",
   gap: 9,
-  fontSize: 15,
+  fontSize: 14,
 };
