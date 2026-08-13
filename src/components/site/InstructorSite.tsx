@@ -633,6 +633,29 @@ export function InstructorSite({
               })}
             </div>
           )}
+          {courses.length > 0 ? (
+            <div style={{ textAlign: "center", marginTop: 24 }}>
+              <a
+                href={`/${slug}/courses`}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 8,
+                  background: "transparent",
+                  color: accent,
+                  border: `1.5px solid ${accent}`,
+                  borderRadius: 50,
+                  padding: "10px 24px",
+                  fontSize: 13,
+                  fontWeight: 700,
+                  textDecoration: "none",
+                  fontFamily: "Poppins, sans-serif",
+                }}
+              >
+                View all courses →
+              </a>
+            </div>
+          ) : null}
         </div>
       </section>
 
