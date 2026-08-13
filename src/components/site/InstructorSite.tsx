@@ -830,14 +830,7 @@ export function InstructorSite({
         <p style={{ fontSize: 11, color: "rgba(255,255,255,0.25)" }}>
           © {new Date().getFullYear()} {name}. All rights reserved.
         </p>
-        <a
-          href="https://everydriver.co.uk"
-          target="_blank"
-          rel="noreferrer"
-          style={{ fontSize: 11, color: "rgba(255,255,255,0.2)", textDecoration: "none" }}
-        >
-          Powered by EveryDriver
-        </a>
+        <p style={{ fontSize: 11, color: "rgba(255,255,255,0.28)", marginTop: 6 }}>Powered by DSM</p>
       </footer>
     </div>
   );
