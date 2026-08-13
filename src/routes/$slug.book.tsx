@@ -110,6 +110,34 @@ function BookPage() {
   const accent = instructor?.brand_colour || DEFAULT_ACCENT;
   const name = instructor ? displayName(instructor) : "your instructor";
   const price = course?.price ?? 0;
+  const isFree = !course?.price || Number(course.price) === 0;
+
+  async function confirmFreeBooking() {
+    if (!instructor) return;
+    setSubmitting(true);
+    setError(null);
+    try {
+      const { error: insertError } = await supabase.from("course_bookings").insert({
+        instructor_id: instructor.id,
+        course_id: courseId,
+        pupil_first_name: firstName.trim(),
+        pupil_last_name: lastName.trim(),
+        pupil_name: `${firstName.trim()} ${lastName.trim()}`.trim(),
+        pupil_phone: phone.trim(),
+        pupil_email: email.trim() || null,
+        pickup_address: pickupAddress.trim() || null,
+        special_needs: notes.trim() || null,
+        status: "confirmed",
+        amount_paid: 0,
+      });
+      if (insertError) throw new Error(insertError.message);
+      window.location.href = `/${slug}/booking-confirmed`;
+    } catch (e) {
+      setError((e as { message?: string })?.message ?? "Could not confirm booking");
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   async function generatePaymentLink() {
     if (!instructor) return;
@@ -407,7 +435,7 @@ function BookPage() {
                   </p>
                 ) : null}
                 <p style={{ fontSize: 26, fontWeight: 800, color: accent, marginTop: 10 }}>
-                  £{price}
+                  {isFree ? "Free" : `£${price}`}
                 </p>
               </div>
               <div style={{ padding: 16, display: "flex", alignItems: "center", gap: 12 }}>
@@ -450,6 +478,25 @@ function BookPage() {
                 <span style={valueStyle}>{pickupAddress || "—"}</span>
               </Row>
             </Card>
+
+            {isFree ? (
+              <div
+                style={{
+                  background: "#DCFCE7",
+                  borderRadius: 12,
+                  padding: "12px 14px",
+                  display: "flex",
+                  gap: 8,
+                  alignItems: "flex-start",
+                  marginBottom: 20,
+                }}
+              >
+                <span style={{ color: "#15803D", fontSize: 13, fontWeight: 800 }}>✓</span>
+                <span style={{ fontSize: 13, color: "#15803D", lineHeight: 1.5 }}>
+                  This is a free course — no payment required
+                </span>
+              </div>
+            ) : null}
 
             <label style={{ display: "flex", gap: 10, alignItems: "flex-start", marginBottom: 20 }}>
               <input
