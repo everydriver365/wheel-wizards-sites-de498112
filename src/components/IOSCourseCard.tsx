@@ -55,6 +55,13 @@ function splitDate(value?: string | null) {
   };
 }
 
+function isFuture(value?: string | null) {
+  if (!value) return false;
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return false;
+  return d > new Date();
+}
+
 function ClockIcon() {
   return (
     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke={TEAL} strokeWidth="2" strokeLinecap="round" aria-hidden="true">
@@ -103,13 +110,19 @@ function GearIcon() {
 export default function IOSCourseCard({ course, instructor, onEnquire, enquireHref }: IOSCourseCardProps) {
   const brand = DEEP_BLUE;
   const title = course.name || `${course.total_hours ?? ""} hour driving lessons`.trim();
-  const date = splitDate(course.available_from || course.start_date);
+  const dateValue = isFuture(course.available_from)
+    ? course.available_from
+    : isFuture(course.start_date)
+      ? course.start_date
+      : null;
+  const date = splitDate(dateValue);
   const withName = instructor.trading_name || instructor.name || "your instructor";
   const location = [instructor.city, instructor.postcode].filter(Boolean).join(" · ");
   const type = typeLabel(course.course_type, course.name);
   const transmission = instructor.car_type
     ? transmissionLabel(instructor.car_type)
     : transmissionLabel(`${course.course_type ?? ""} ${course.name ?? ""}`);
+  console.log("[transmission] car_type:", instructor.car_type, "result:", transmission);
 
   return (
     <a
