@@ -52,6 +52,7 @@ function splitDate(value?: string | null) {
     day: String(d.getDate()),
     month: d.toLocaleDateString("en-GB", { month: "short" }).toUpperCase(),
     short: d.toLocaleDateString("en-GB", { day: "numeric", month: "short" }),
+    year: d.getFullYear(),
   };
 }
 
@@ -122,7 +123,7 @@ export default function IOSCourseCard({ course, instructor, onEnquire, enquireHr
   const transmission = instructor.car_type
     ? transmissionLabel(instructor.car_type)
     : transmissionLabel(`${course.course_type ?? ""} ${course.name ?? ""}`);
-  console.log("[transmission] car_type:", instructor.car_type, "result:", transmission);
+  const showYear = date != null && date.year !== new Date().getFullYear();
 
   return (
     <a
@@ -225,6 +226,11 @@ export default function IOSCourseCard({ course, instructor, onEnquire, enquireHr
             <span style={{ fontSize: 12, fontWeight: 600, letterSpacing: "0.08em", marginTop: 6 }}>
               {date.month}
             </span>
+            {showYear ? (
+              <span style={{ fontSize: 11, fontWeight: 600, opacity: 0.8, marginTop: 4 }}>
+                {date.year}
+              </span>
+            ) : null}
           </div>
         ) : null}
 

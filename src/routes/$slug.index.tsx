@@ -40,8 +40,7 @@ async function loadSite(slug: string) {
       )
       .eq("instructor_id", instructor.id)
       .is("deleted_at", null)
-      .or(`available_from.is.null,available_from.gte.${today}`)
-      .or(`start_date.is.null,start_date.gte.${today}`)
+      .or(`available_from.gte.${today},start_date.gte.${today}`)
       .order("image_url", { ascending: false, nullsFirst: false })
       .order("created_at", { ascending: false })
       .limit(6),
