@@ -36,7 +36,7 @@ async function loadSite(slug: string) {
     supabase
       .from("instructor_courses")
       .select(
-        "id, course_type, name, total_hours, price, start_date, image_url, description, available_from",
+        "id, course_type, name, total_hours, price, start_date, image_url, description, available_from, early_bird_discount, early_bird_expiry",
       )
       .eq("instructor_id", instructor.id)
       .is("deleted_at", null)

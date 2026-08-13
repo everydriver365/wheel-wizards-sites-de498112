@@ -34,7 +34,7 @@ async function loadCourses(slug: string) {
   const { data: courses } = await supabase
     .from("instructor_courses")
     .select(
-      "id, course_type, name, total_hours, price, start_date, image_url, course_image_url, description, available_from",
+      "id, course_type, name, total_hours, price, start_date, image_url, course_image_url, description, available_from, early_bird_discount, early_bird_expiry",
     )
     .eq("instructor_id", instructor.id)
     .is("deleted_at", null)
@@ -92,6 +92,8 @@ function CoursesPage() {
                     start_date: course.start_date ?? null,
                     available_from: course.available_from ?? null,
                     image_url: course.image_url ?? course.course_image_url ?? null,
+                    early_bird_discount: (course as unknown as { early_bird_discount?: number | null }).early_bird_discount ?? null,
+                    early_bird_expiry: (course as unknown as { early_bird_expiry?: string | null }).early_bird_expiry ?? null,
                   }}
                   instructor={{
                     name: instructor?.name ?? null,

@@ -14,6 +14,8 @@ interface IOSCourseCardProps {
     start_date?: string | null;
     available_from?: string | null;
     image_url?: string | null;
+    early_bird_discount?: number | null;
+    early_bird_expiry?: string | null;
   };
   instructor: {
     name?: string | null;
@@ -60,6 +62,25 @@ function isFuture(value?: string | null) {
   const d = new Date(value);
   if (Number.isNaN(d.getTime())) return false;
   return d > new Date();
+}
+
+/** Active early-bird discount, derived from the real course fields. */
+function earlyBird(course: { price?: number | null; early_bird_discount?: number | null; early_bird_expiry?: string | null }) {
+  const amount = Number(course.early_bird_discount ?? 0);
+  if (!amount || amount <= 0) return null;
+  const expiry = course.early_bird_expiry ? new Date(course.early_bird_expiry) : null;
+  if (expiry && !Number.isNaN(expiry.getTime()) && expiry < new Date()) return null;
+  const price = course.price != null ? Number(course.price) : null;
+  if (price == null) return null;
+  return {
+    amount,
+    original: price,
+    discounted: Math.max(price - amount, 0),
+    deadline:
+      expiry && !Number.isNaN(expiry.getTime())
+        ? expiry.toLocaleDateString("en-GB", { day: "numeric", month: "short" })
+        : null,
+  };
 }
 
 function ClockIcon() {
@@ -123,6 +144,7 @@ export default function IOSCourseCard({ course, instructor, onEnquire, enquireHr
     ? transmissionLabel(instructor.car_type)
     : transmissionLabel(`${course.course_type ?? ""} ${course.name ?? ""}`);
   const showYear = date != null && date.year !== new Date().getFullYear();
+  const deal = earlyBird(course);
 
   return (
     <a
@@ -151,6 +173,26 @@ export default function IOSCourseCard({ course, instructor, onEnquire, enquireHr
     >
       {/* Image with pill badges */}
       <div style={{ position: "relative" }}>
+        {deal ? (
+          <span
+            style={{
+              position: "absolute",
+              top: 16,
+              right: -32,
+              background: "#1877D6",
+              color: "#fff",
+              fontSize: 11,
+              fontWeight: 900,
+              letterSpacing: "0.4px",
+              padding: "5px 38px",
+              transform: "rotate(38deg)",
+              boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+              zIndex: 2,
+            }}
+          >
+            SAVE £{deal.amount}
+          </span>
+        ) : null}
         {course.image_url ? (
           <img
             src={course.image_url}
@@ -298,16 +340,42 @@ export default function IOSCourseCard({ course, instructor, onEnquire, enquireHr
                 >
                   FROM
                 </span>
-                <span
-                  style={{
-                    color: NAVY,
-                    fontSize: 27,
-                    fontWeight: 900,
-                    letterSpacing: "-0.5px",
-                  }}
-                >
-                  £{course.price}
+                <span style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
+                  {deal ? (
+                    <span
+                      style={{
+                        color: "#B0B0B5",
+                        fontSize: 15,
+                        fontWeight: 700,
+                        textDecoration: "line-through",
+                      }}
+                    >
+                      £{deal.original}
+                    </span>
+                  ) : null}
+                  <span
+                    style={{
+                      color: deal ? "#1A9B5C" : "#0B1F3A",
+                      fontSize: 27,
+                      fontWeight: 900,
+                      letterSpacing: "-0.5px",
+                    }}
+                  >
+                    £{deal ? deal.discounted : course.price}
+                  </span>
                 </span>
+                {deal?.deadline ? (
+                  <span
+                    style={{
+                      marginTop: 2,
+                      color: "#1877D6",
+                      fontSize: 10.5,
+                      fontWeight: 700,
+                    }}
+                  >
+                    Book by {deal.deadline}
+                  </span>
+                ) : null}
               </span>
             ) : (
               <span />

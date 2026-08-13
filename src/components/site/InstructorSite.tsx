@@ -615,6 +615,8 @@ export function InstructorSite({
                     start_date: course.start_date ?? null,
                     available_from: course.available_from ?? null,
                     image_url: course.image_url ?? null,
+                    early_bird_discount: (course as unknown as { early_bird_discount?: number | null }).early_bird_discount ?? null,
+                    early_bird_expiry: (course as unknown as { early_bird_expiry?: string | null }).early_bird_expiry ?? null,
                   }}
                   instructor={{
                     name: instructor.name ?? "",
