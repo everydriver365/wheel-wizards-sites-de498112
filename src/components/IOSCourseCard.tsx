@@ -62,15 +62,6 @@ function isFuture(value?: string | null) {
   return d > new Date();
 }
 
-function unusedSplitDateTail(d: Date) {
-  if (Number.isNaN(d.getTime())) return null;
-  return {
-    day: String(d.getDate()),
-    month: d.toLocaleDateString("en-GB", { month: "short" }).toUpperCase(),
-    short: d.toLocaleDateString("en-GB", { day: "numeric", month: "short" }),
-  };
-}
-
 function ClockIcon() {
   return (
     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke={TEAL} strokeWidth="2" strokeLinecap="round" aria-hidden="true">
