@@ -322,9 +322,11 @@ export function InstructorSite({
             </p>
 
             <div style={{ display: "flex", flexWrap: "wrap", gap: 12, marginTop: 28 }}>
-              <button
-                onClick={() => goEnquire()}
+              <a
+                href={`/${slug}/enquire`}
                 style={{
+                  display: "inline-block",
+                  textDecoration: "none",
                   background: accent,
                   color: T.white,
                   padding: "15px 30px",
@@ -337,7 +339,7 @@ export function InstructorSite({
                 }}
               >
                 Book a lesson
-              </button>
+              </a>
               <button
                 onClick={() => scrollToId("courses")}
                 style={{
@@ -763,11 +765,7 @@ export function InstructorSite({
           Send {name} a message and they'll be in touch soon.
         </p>
         <a
-          href={enquireHref()}
-          onClick={(event) => {
-            event.preventDefault();
-            goEnquire();
-          }}
+          href={`/${slug}/enquire`}
           style={{
             display: "inline-block",
             background: accent,
