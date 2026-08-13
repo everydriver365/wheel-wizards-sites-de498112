@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SlugIndexRouteImport } from './routes/$slug.index'
 import { Route as SlugAboutRouteImport } from './routes/$slug.about'
 import { Route as SlugBookRouteImport } from './routes/$slug.book'
+import { Route as SlugBookingConfirmedRouteImport } from './routes/$slug.booking-confirmed'
 import { Route as SlugCoursesRouteImport } from './routes/$slug.courses'
 import { Route as SlugEnquireRouteImport } from './routes/$slug.enquire'
 import { Route as SlugReviewsRouteImport } from './routes/$slug.reviews'
@@ -37,6 +38,11 @@ const SlugBookRoute = SlugBookRouteImport.update({
   path: '/$slug/book',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SlugBookingConfirmedRoute = SlugBookingConfirmedRouteImport.update({
+  id: '/$slug/booking-confirmed',
+  path: '/$slug/booking-confirmed',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SlugCoursesRoute = SlugCoursesRouteImport.update({
   id: '/$slug/courses',
   path: '/$slug/courses',
@@ -57,6 +63,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$slug/about': typeof SlugAboutRoute
   '/$slug/book': typeof SlugBookRoute
+  '/$slug/booking-confirmed': typeof SlugBookingConfirmedRoute
   '/$slug/courses': typeof SlugCoursesRoute
   '/$slug/enquire': typeof SlugEnquireRoute
   '/$slug/reviews': typeof SlugReviewsRoute
@@ -66,6 +73,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$slug/about': typeof SlugAboutRoute
   '/$slug/book': typeof SlugBookRoute
+  '/$slug/booking-confirmed': typeof SlugBookingConfirmedRoute
   '/$slug/courses': typeof SlugCoursesRoute
   '/$slug/enquire': typeof SlugEnquireRoute
   '/$slug/reviews': typeof SlugReviewsRoute
@@ -76,6 +84,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/$slug/about': typeof SlugAboutRoute
   '/$slug/book': typeof SlugBookRoute
+  '/$slug/booking-confirmed': typeof SlugBookingConfirmedRoute
   '/$slug/courses': typeof SlugCoursesRoute
   '/$slug/enquire': typeof SlugEnquireRoute
   '/$slug/reviews': typeof SlugReviewsRoute
@@ -87,6 +96,7 @@ export interface FileRouteTypes {
     | '/'
     | '/$slug/about'
     | '/$slug/book'
+    | '/$slug/booking-confirmed'
     | '/$slug/courses'
     | '/$slug/enquire'
     | '/$slug/reviews'
@@ -96,6 +106,7 @@ export interface FileRouteTypes {
     | '/'
     | '/$slug/about'
     | '/$slug/book'
+    | '/$slug/booking-confirmed'
     | '/$slug/courses'
     | '/$slug/enquire'
     | '/$slug/reviews'
@@ -105,6 +116,7 @@ export interface FileRouteTypes {
     | '/'
     | '/$slug/about'
     | '/$slug/book'
+    | '/$slug/booking-confirmed'
     | '/$slug/courses'
     | '/$slug/enquire'
     | '/$slug/reviews'
@@ -115,6 +127,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   SlugAboutRoute: typeof SlugAboutRoute
   SlugBookRoute: typeof SlugBookRoute
+  SlugBookingConfirmedRoute: typeof SlugBookingConfirmedRoute
   SlugCoursesRoute: typeof SlugCoursesRoute
   SlugEnquireRoute: typeof SlugEnquireRoute
   SlugReviewsRoute: typeof SlugReviewsRoute
@@ -151,6 +164,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SlugBookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/$slug/booking-confirmed': {
+      id: '/$slug/booking-confirmed'
+      path: '/$slug/booking-confirmed'
+      fullPath: '/$slug/booking-confirmed'
+      preLoaderRoute: typeof SlugBookingConfirmedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/$slug/courses': {
       id: '/$slug/courses'
       path: '/$slug/courses'
@@ -179,6 +199,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SlugAboutRoute: SlugAboutRoute,
   SlugBookRoute: SlugBookRoute,
+  SlugBookingConfirmedRoute: SlugBookingConfirmedRoute,
   SlugCoursesRoute: SlugCoursesRoute,
   SlugEnquireRoute: SlugEnquireRoute,
   SlugReviewsRoute: SlugReviewsRoute,
