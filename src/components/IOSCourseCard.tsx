@@ -138,7 +138,7 @@ export default function IOSCourseCard({ course, instructor, onEnquire, enquireHr
       : null;
   const date = splitDate(dateValue);
   const withName = instructor.trading_name || instructor.name || "your instructor";
-  const location = [instructor.city, instructor.postcode].filter(Boolean).join(" · ");
+  const location = instructor.city || "";
   const type = typeLabel(course.course_type, course.name);
   const transmission = instructor.car_type
     ? transmissionLabel(instructor.car_type)
