@@ -83,10 +83,16 @@ export function InstructorSite({
   instructor,
   courses,
   reviews,
+  passRate = null,
+  totalTests = 0,
+  nextAvailable = null,
 }: {
   instructor: Instructor;
   courses: Course[];
   reviews: Review[];
+  passRate?: number | null;
+  totalTests?: number;
+  nextAvailable?: string | null;
 }) {
   const accent = instructor.brand_colour || DEFAULT_ACCENT;
   const name = displayName(instructor);
@@ -122,12 +128,30 @@ export function InstructorSite({
   }, [instructor.website_gallery_urls]);
 
   const stats = [
-    reviews.length ? { value: `${reviews.length}+`, label: "Happy pupils" } : null,
+    passRate !== null
+      ? { value: `${passRate}%`, label: "Pass rate", sub: `${totalTests} tests` }
+      : reviews.length
+        ? { value: `${reviews.length}+`, label: "Happy pupils" }
+        : null,
     { value: instructor.dvsa_grade || "ADI", label: "DVSA grade" },
     { value: instructor.dvsa_type || "Qualified", label: "Licence type" },
     courses.length ? { value: `${courses.length}`, label: "Courses" } : null,
     { value: instructor.dbs_uploaded ? "DBS" : "Vetted", label: "Background check" },
-  ].filter(Boolean) as { value: string; label: string }[];
+  ].filter(Boolean) as { value: string; label: string; sub?: string }[];
+
+  const formatWhatsApp = (phone: string) => {
+    const digits = phone.replace(/\D/g, "");
+    if (digits.startsWith("07")) return `44${digits.slice(1)}`;
+    if (digits.startsWith("447")) return digits;
+    return digits;
+  };
+
+  const waNumber = instructor.phone ? formatWhatsApp(String(instructor.phone)) : null;
+  const waUrl = waNumber
+    ? `https://wa.me/${waNumber}?text=${encodeURIComponent(
+        `Hi, I'm interested in driving lessons with ${instructor.trading_name ?? instructor.name ?? name}`,
+      )}`
+    : null;
 
   const badges = [
     instructor.dvsa_type ? String(instructor.dvsa_type).toUpperCase() : null,
