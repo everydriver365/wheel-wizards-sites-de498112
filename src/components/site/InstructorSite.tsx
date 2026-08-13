@@ -322,9 +322,11 @@ export function InstructorSite({
             </p>
 
             <div style={{ display: "flex", flexWrap: "wrap", gap: 12, marginTop: 28 }}>
-              <button
-                onClick={() => goEnquire()}
+              <a
+                href={`/${slug}/enquire`}
                 style={{
+                  display: "inline-block",
+                  textDecoration: "none",
                   background: accent,
                   color: T.white,
                   padding: "15px 30px",
@@ -337,7 +339,7 @@ export function InstructorSite({
                 }}
               >
                 Book a lesson
-              </button>
+              </a>
               <button
                 onClick={() => scrollToId("courses")}
                 style={{
@@ -601,16 +603,6 @@ export function InstructorSite({
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 28, alignItems: "stretch" }}>
               {courses.map((course) => {
-                console.log(
-                  "[course card]",
-                  course.name,
-                  "image_url:",
-                  course.image_url,
-                  "course_image_url:",
-                  course.course_image_url,
-                  "resolved image prop:",
-                  course.image_url ?? course.course_image_url ?? null,
-                );
                 return (
                 <IOSCourseCard
                   key={course.id}
@@ -622,10 +614,7 @@ export function InstructorSite({
                     price: course.price ?? null,
                     start_date: course.start_date ?? null,
                     available_from: course.available_from ?? null,
-                    image_url:
-                      course.image_url ??
-                      course.course_image_url ??
-                      null,
+                    image_url: course.image_url ?? null,
                   }}
                   instructor={{
                     name: instructor.name ?? "",
@@ -776,11 +765,7 @@ export function InstructorSite({
           Send {name} a message and they'll be in touch soon.
         </p>
         <a
-          href={enquireHref()}
-          onClick={(event) => {
-            event.preventDefault();
-            goEnquire();
-          }}
+          href={`/${slug}/enquire`}
           style={{
             display: "inline-block",
             background: accent,
