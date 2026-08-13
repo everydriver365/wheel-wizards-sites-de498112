@@ -472,7 +472,7 @@ function BookPage() {
                 <span style={valueStyle}>{course?.name ?? "—"}</span>
               </Row>
               <Row label="Price">
-                <span style={valueStyle}>£{price}</span>
+                <span style={valueStyle}>{isFree ? "Free" : `£${price}`}</span>
               </Row>
               <Row label="Pickup" last>
                 <span style={valueStyle}>{pickupAddress || "—"}</span>
@@ -533,11 +533,11 @@ function BookPage() {
       >
         <div style={{ maxWidth: 480, margin: "0 auto" }}>
           <button
-            onClick={step === 3 ? generatePaymentLink : handleContinue}
+            onClick={step === 3 ? (isFree ? confirmFreeBooking : generatePaymentLink) : handleContinue}
             disabled={submitting || loading || (step === 3 && !termsChecked)}
             style={{
               width: "100%",
-              background: accent,
+              background: step === 3 && isFree ? "#15803D" : accent,
               color: "#fff",
               border: "none",
               borderRadius: 16,
