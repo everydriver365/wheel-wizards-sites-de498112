@@ -526,6 +526,9 @@ export function InstructorSite({
                 {stat.value}
               </p>
               <p style={{ fontSize: 12, color: T.muted, fontWeight: 600 }}>{stat.label}</p>
+              {stat.sub ? (
+                <p style={{ fontSize: 11, color: T.muted, fontWeight: 500, marginTop: 2 }}>{stat.sub}</p>
+              ) : null}
             </div>
           ))}
         </div>
